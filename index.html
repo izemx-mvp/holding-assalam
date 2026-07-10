@@ -454,7 +454,7 @@ body.dark-mode .mode-btn{background:#0F1922;}
           <div class="hh-top">
             <div>
               <div class="hh-title">Holding Assalam — vue consolidée</div>
-              <div class="hh-consolid">4,86 M DT</div>
+              <div class="hh-consolid">4,86 M DH</div>
               <div class="hh-sub">Chiffre d'affaires consolidé du mois — 4 établissements. Responsable holding : Tarik El Houari.</div>
             </div>
             <button class="btn btn-ia" onclick="go('orientation')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/></svg>Tester l'orientation IA</button>
@@ -641,19 +641,19 @@ const PATIENTS = [
   {id:"P-1001", name:"Mouna Ben Salah", age:52, sexe:"F", clinic:"Les Oliviers", tel:"+216 20 123 456", groupe:"A+", allergies:"Pénicilline", antecedents:"HTA, diabète type 2", statut:"Hospitalisée",
    consultations:[{date:"09/07/2026", motif:"Douleur thoracique", medecin:"Dr. Amine Belhassen"}],
    examens:[{date:"09/07/2026", type:"Troponine (Labo)", resultat:"Positive — critique"}],
-   factures:[{num:"FC-91820", date:"09/07/2026", montant:"1 240 DT", statut:"Payée"}]},
+   factures:[{num:"FC-91820", date:"09/07/2026", montant:"1 240 DH", statut:"Payée"}]},
   {id:"P-1002", name:"Karim Tlili", age:34, sexe:"M", clinic:"Atlas", tel:"+216 22 456 789", groupe:"O-", allergies:"Aucune connue", antecedents:"RAS", statut:"En observation",
    consultations:[{date:"09/07/2026", motif:"Traumatisme bras", medecin:"Dr. Ines Ferjani"}],
    examens:[{date:"09/07/2026", type:"Radio bras", resultat:"Fracture confirmée"}],
-   factures:[{num:"FC-91818", date:"09/07/2026", montant:"380 DT", statut:"En attente"}]},
+   factures:[{num:"FC-91818", date:"09/07/2026", montant:"380 DH", statut:"En attente"}]},
   {id:"P-1003", name:"Sonia Haddad", age:29, sexe:"F", clinic:"Ennasr", tel:"+216 24 789 123", groupe:"B+", allergies:"Aucune connue", antecedents:"Grossesse en cours (28 SA)", statut:"Consultation",
    consultations:[{date:"09/07/2026", motif:"Suivi de grossesse", medecin:"Dr. Sonia Sassi"}],
    examens:[{date:"09/07/2026", type:"Échographie obstétricale", resultat:"Normale"}],
-   factures:[{num:"FC-91805", date:"09/07/2026", montant:"620 DT", statut:"Rejet à corriger"}]},
+   factures:[{num:"FC-91805", date:"09/07/2026", montant:"620 DH", statut:"Rejet à corriger"}]},
   {id:"P-1004", name:"Ahmed Riahi", age:61, sexe:"M", clinic:"Al Andalous", tel:"+216 25 321 654", groupe:"AB+", allergies:"Iode", antecedents:"Chirurgie appendicite (2019)", statut:"Sortie prévue",
    consultations:[{date:"08/07/2026", motif:"Bilan pré-opératoire", medecin:"Dr. Yassine Trabelsi"}],
    examens:[{date:"08/07/2026", type:"Ionogramme", resultat:"Normal"}],
-   factures:[{num:"FC-91811", date:"08/07/2026", montant:"4 950 DT", statut:"Payée"}]},
+   factures:[{num:"FC-91811", date:"08/07/2026", montant:"4 950 DH", statut:"Payée"}]},
   {id:"P-1005", name:"Nadia Jendoubi", age:45, sexe:"F", clinic:"Les Oliviers", tel:"+216 27 963 852", groupe:"O+", allergies:"Latex", antecedents:"Antécédent cardiaque familial", statut:"Critique",
    consultations:[{date:"09/07/2026", motif:"Douleur thoracique aiguë", medecin:"Dr. Amine Belhassen"}],
    examens:[{date:"09/07/2026", type:"NFS + CRP", resultat:"Critique — alerte envoyée"}],
@@ -873,8 +873,8 @@ function submitConge(){
 
 /* ================= ACHATS GROUPE ================= */
 const ACHATS_QUEUE = [
-  {id:"BC-3378", fournisseur:"MedSupply Tunisie", produit:"Consommables bloc", cliniques:"4 cliniques (mutualisé)", montant:"214 000 DT", statut:"En validation", origine:"Manuel"},
-  {id:"BC-3372", fournisseur:"TechMed Equip.", produit:"Matériel d'imagerie", cliniques:"Al Andalous", montant:"112 000 DT", statut:"Validée", origine:"Manuel"},
+  {id:"BC-3378", fournisseur:"MedSupply Tunisie", produit:"Consommables bloc", cliniques:"4 cliniques (mutualisé)", montant:"214 000 DH", statut:"En validation", origine:"Manuel"},
+  {id:"BC-3372", fournisseur:"TechMed Equip.", produit:"Matériel d'imagerie", cliniques:"Al Andalous", montant:"112 000 DH", statut:"Validée", origine:"Manuel"},
 ];
 function renderAchats(){
   const tbody = ACHATS_QUEUE.map(a=>`<tr class="clickable" onclick="openAchatDetail('${a.id}')">
@@ -907,7 +907,7 @@ function openAchatDetail(id){
 }
 function envoyerAlerteAchat(produit, stockLocal, seuil){
   const id = nextId("BC");
-  const montantEstime = (Math.round((seuil-stockLocal)*35))+" DT";
+  const montantEstime = (Math.round((seuil-stockLocal)*35))+" DH";
   ACHATS_QUEUE.unshift({id, fournisseur:"PharmaDistrib (fournisseur habituel)", produit, cliniques:"Les Oliviers (réappro. urgent)", montant:montantEstime, statut:"À confirmer", origine:"Agent IA"});
   renderAchats();
   toast("Alerte transmise à l'Agent Achats : commande "+id+" générée automatiquement, en attente de votre confirmation (Espace Holding → Achats & stocks groupe).");
@@ -941,9 +941,9 @@ function getFinancials(clinic, year){
   return {produits,achats,personnel,amort,autresCharges,chargesTotal,resultatExpl,resultatNet,immobilisations,stocks,creances,tresorerie,totalActif,capitauxPropres,dettesFin,dettesFourn,autresDettes,totalPassif};
 }
 const JOURNAL = [
-  {id:"J-0001", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"411000 Clients", libelle:"Facture prestations de soins", debit:"980 DT", credit:"", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Constatation de la créance client suite à la facture FC-90211."},
-  {id:"J-0002", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"706000 Prestations de soins", libelle:"Facture prestations de soins", debit:"", credit:"980 DT", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Comptabilisation du produit d'exploitation lié à la facture FC-90211."},
-  {id:"J-0003", date:"18/06/2026", mois:"2026-06", clinique:"Atlas", piece:"OD-004", compte:"616000 Primes d'assurance", libelle:"Régularisation assurance RC", debit:"1 200 DT", credit:"", justificatif:"Pièce manuelle", origine:"Manuel", explication:"Régularisation de la prime d'assurance responsabilité civile du 2e trimestre."},
+  {id:"J-0001", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"411000 Clients", libelle:"Facture prestations de soins", debit:"980 DH", credit:"", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Constatation de la créance client suite à la facture FC-90211."},
+  {id:"J-0002", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"706000 Prestations de soins", libelle:"Facture prestations de soins", debit:"", credit:"980 DH", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Comptabilisation du produit d'exploitation lié à la facture FC-90211."},
+  {id:"J-0003", date:"18/06/2026", mois:"2026-06", clinique:"Atlas", piece:"OD-004", compte:"616000 Primes d'assurance", libelle:"Régularisation assurance RC", debit:"1 200 DH", credit:"", justificatif:"Pièce manuelle", origine:"Manuel", explication:"Régularisation de la prime d'assurance responsabilité civile du 2e trimestre."},
 ];
 function generateJournalId(){ __idCounter++; return "J-"+String(__idCounter).padStart(4,"0"); }
 function monthLabel(m){ const map={"2026-07":"Juillet 2026","2026-06":"Juin 2026","2026-05":"Mai 2026"}; return map[m]||m; }
@@ -959,8 +959,8 @@ function exporterVersSage(clinic, year){
   filtered.forEach(j=>{
     const compteNum = j.compte.split(" ")[0];
     const libelle = (j.explication||j.libelle).replace(/;/g,",");
-    const deb = (j.debit||"").replace(" DT","").replace(/\s/g,"").replace(",",".");
-    const cred = (j.credit||"").replace(" DT","").replace(/\s/g,"").replace(",",".");
+    const deb = (j.debit||"").replace(" DH","").replace(/\s/g,"").replace(",",".");
+    const cred = (j.credit||"").replace(" DH","").replace(/\s/g,"").replace(",",".");
     csv += ["VE", j.date, compteNum, libelle, j.piece, deb, cred].join(";") + "\n";
   });
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
@@ -1000,7 +1000,7 @@ function pfListHtml(){
     return `<div class="clinic-chip" style="background:var(--navy-900); border-color:var(--navy-700);" onclick="openPortefeuille('${c}')">
       <div class="cc-name">${c}</div>
       <div class="cell-muted" style="color:#9FC0B8; font-size:11px; margin-bottom:8px;">${CLINIC_PROFILES[c].ville} · Responsable : ${CLINIC_PROFILES[c].responsable}</div>
-      <div class="cc-stats"><span>CA annuel 2026</span><b>${fin.produits} K DT</b></div>
+      <div class="cc-stats"><span>CA annuel 2026</span><b>${fin.produits} K DH</b></div>
     </div>`;
   }).join("");
   return `<div class="page-head"><div><h1 class="page-title">Portefeuille cliniques</h1><p class="page-desc">Cliquez une clinique pour accéder à ses exercices comptables : saisie/journal, bilan, CPC et documents.</p></div></div>
@@ -1019,9 +1019,9 @@ function pfClinicHtml(clinic){
   return `<div class="breadcrumb"><span class="crumb" onclick="pfGoList()">Portefeuille cliniques</span> / ${clinic}</div>
     <div class="page-head"><div><h1 class="page-title">${clinic}</h1><p class="page-desc">${p.ville} · Responsable : ${p.responsable}</p></div></div>
     <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.produits} K DT</div><div class="kpi-label">Produits d'exploitation 2026</div></div>
-      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.resultatNet} K DT</div><div class="kpi-label">Résultat net 2026</div></div>
-      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,165,36,.12); color:var(--amber-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.totalActif} K DT</div><div class="kpi-label">Total Actif 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.produits} K DH</div><div class="kpi-label">Produits d'exploitation 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.resultatNet} K DH</div><div class="kpi-label">Résultat net 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,165,36,.12); color:var(--amber-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.totalActif} K DH</div><div class="kpi-label">Total Actif 2026</div></div>
       <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">4</div><div class="kpi-label">Exercices disponibles</div></div>
     </div>
     <div class="card-head" style="padding:0 0 12px; border:none;"><h3>Exercices comptables</h3></div>
@@ -1043,32 +1043,32 @@ function pfBilanHtml(fin, year){
   return `<div class="grid-2">
     <div class="card"><div class="card-head"><h3>Actif — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
       <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
-      <tr><td>Immobilisations corporelles</td><td>${fin.immobilisations} K DT</td></tr>
-      <tr><td>Stocks</td><td>${fin.stocks} K DT</td></tr>
-      <tr><td>Créances clients</td><td>${fin.creances} K DT</td></tr>
-      <tr><td>Trésorerie</td><td>${fin.tresorerie} K DT</td></tr>
-      <tr><td class="cell-strong">Total Actif</td><td class="cell-strong">${fin.totalActif} K DT</td></tr>
+      <tr><td>Immobilisations corporelles</td><td>${fin.immobilisations} K DH</td></tr>
+      <tr><td>Stocks</td><td>${fin.stocks} K DH</td></tr>
+      <tr><td>Créances clients</td><td>${fin.creances} K DH</td></tr>
+      <tr><td>Trésorerie</td><td>${fin.tresorerie} K DH</td></tr>
+      <tr><td class="cell-strong">Total Actif</td><td class="cell-strong">${fin.totalActif} K DH</td></tr>
       </tbody></table></div></div>
     <div class="card"><div class="card-head"><h3>Passif — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
       <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
-      <tr><td>Capitaux propres</td><td>${fin.capitauxPropres} K DT</td></tr>
-      <tr><td>Dettes financières</td><td>${fin.dettesFin} K DT</td></tr>
-      <tr><td>Dettes fournisseurs</td><td>${fin.dettesFourn} K DT</td></tr>
-      <tr><td>Autres dettes</td><td>${fin.autresDettes} K DT</td></tr>
-      <tr><td class="cell-strong">Total Passif</td><td class="cell-strong">${fin.totalPassif} K DT</td></tr>
+      <tr><td>Capitaux propres</td><td>${fin.capitauxPropres} K DH</td></tr>
+      <tr><td>Dettes financières</td><td>${fin.dettesFin} K DH</td></tr>
+      <tr><td>Dettes fournisseurs</td><td>${fin.dettesFourn} K DH</td></tr>
+      <tr><td>Autres dettes</td><td>${fin.autresDettes} K DH</td></tr>
+      <tr><td class="cell-strong">Total Passif</td><td class="cell-strong">${fin.totalPassif} K DH</td></tr>
       </tbody></table></div></div>
   </div>`;
 }
 function pfCpcHtml(fin, year){
   return `<div class="card"><div class="card-head"><h3>Compte de Produits et Charges (CPC) — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
     <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
-    <tr><td class="cell-strong">Produits d'exploitation</td><td class="cell-strong">${fin.produits} K DT</td></tr>
-    <tr><td>Achats consommés (médicaments, consommables)</td><td>-${fin.achats} K DT</td></tr>
-    <tr><td>Charges de personnel</td><td>-${fin.personnel} K DT</td></tr>
-    <tr><td>Dotations aux amortissements</td><td>-${fin.amort} K DT</td></tr>
-    <tr><td>Autres charges d'exploitation</td><td>-${fin.autresCharges} K DT</td></tr>
-    <tr><td class="cell-strong">Résultat d'exploitation</td><td class="cell-strong">${fin.resultatExpl} K DT</td></tr>
-    <tr><td class="cell-strong">Résultat net de l'exercice</td><td class="cell-strong" style="color:var(--teal-500);">${fin.resultatNet} K DT</td></tr>
+    <tr><td class="cell-strong">Produits d'exploitation</td><td class="cell-strong">${fin.produits} K DH</td></tr>
+    <tr><td>Achats consommés (médicaments, consommables)</td><td>-${fin.achats} K DH</td></tr>
+    <tr><td>Charges de personnel</td><td>-${fin.personnel} K DH</td></tr>
+    <tr><td>Dotations aux amortissements</td><td>-${fin.amort} K DH</td></tr>
+    <tr><td>Autres charges d'exploitation</td><td>-${fin.autresCharges} K DH</td></tr>
+    <tr><td class="cell-strong">Résultat d'exploitation</td><td class="cell-strong">${fin.resultatExpl} K DH</td></tr>
+    <tr><td class="cell-strong">Résultat net de l'exercice</td><td class="cell-strong" style="color:var(--teal-500);">${fin.resultatNet} K DH</td></tr>
     </tbody></table></div></div>`;
 }
 function pfDocsHtml(clinic, year){
@@ -1311,15 +1311,15 @@ CRUD.facturation = {
     {key:"patient", label:"Patient", required:true, strong:true},
     {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
     {key:"origine", label:"Origine (module)", placeholder:"Ex. Consultation + Labo"},
-    {key:"montant", label:"Montant", placeholder:"Ex. 620 DT"},
+    {key:"montant", label:"Montant", placeholder:"Ex. 620 DH"},
     {key:"payeur", label:"Payeur", type:"select", options:["CNAM","Assurance privée","Patient direct"]},
     {key:"statut", label:"Statut", type:"select", options:["Payée","En attente","Rejet à corriger"]},
   ],
   defaults:()=>({journalized:false}),
   records:[
-    {id:"FC-91820", patient:"Mouna Ben Salah", clinique:"Les Oliviers", origine:"Consultation + Labo", montant:"1 240 DT", payeur:"CNAM", statut:"Payée", journalized:true},
-    {id:"FC-91818", patient:"Karim Tlili", clinique:"Atlas", origine:"Bloc opératoire", montant:"380 DT", payeur:"Assurance privée", statut:"En attente", journalized:false},
-    {id:"FC-91805", patient:"Sonia Haddad", clinique:"Ennasr", origine:"Consultation + Imagerie", montant:"620 DT", payeur:"CNAM", statut:"Rejet à corriger", journalized:false},
+    {id:"FC-91820", patient:"Mouna Ben Salah", clinique:"Les Oliviers", origine:"Consultation + Labo", montant:"1 240 DH", payeur:"CNAM", statut:"Payée", journalized:true},
+    {id:"FC-91818", patient:"Karim Tlili", clinique:"Atlas", origine:"Bloc opératoire", montant:"380 DH", payeur:"Assurance privée", statut:"En attente", journalized:false},
+    {id:"FC-91805", patient:"Sonia Haddad", clinique:"Ennasr", origine:"Consultation + Imagerie", montant:"620 DH", payeur:"CNAM", statut:"Rejet à corriger", journalized:false},
   ],
   renderExtra:(r)=>`<div class="detail-item" style="grid-column:1/-1;"><div class="dl">Journalisation</div><div class="dv">${r.journalized?statusTag("Journalisée"):statusTag("En attente")}</div></div>`
 };
@@ -1428,7 +1428,7 @@ const NOTIFICATIONS = [
   {id:"N2", type:"amber", icon:"warn", title:"Scanner en maintenance", desc:"Le scanner sera indisponible jusqu'à 16h00", time:"il y a 22 min", unread:true},
   {id:"N3", type:"blue", icon:"info", title:"Nouvelle admission", desc:"Patient admis aux urgences — box 3", time:"il y a 38 min", unread:true},
   {id:"N4", type:"red", icon:"x", title:"Résultat critique", desc:"Résultat laboratoire critique — Dr Amrani notifié", time:"il y a 1h", unread:false},
-  {id:"N5", type:"green", icon:"check", title:"Facture réglée", desc:"Facture FC-91820 encaissée (1 240 DT)", time:"il y a 2h", unread:false},
+  {id:"N5", type:"green", icon:"check", title:"Facture réglée", desc:"Facture FC-91820 encaissée (1 240 DH)", time:"il y a 2h", unread:false},
 ];
 const NOTIF_ICONS = {
   x:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/>',
@@ -1589,8 +1589,8 @@ function renderDashboardExtras(){
         </div>
 
         <div class="stat-row">
-          <div class="stat-card"><div class="stat-top"><span class="stat-label">CA du jour</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">486 500 <span style="font-size:12px; font-weight:600;">DT</span></div><div class="stat-trend up">↗ +12% vs mois dernier</div></div>
-          <div class="stat-card"><div class="stat-top"><span class="stat-label">Encaissements</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">412 300 <span style="font-size:12px; font-weight:600;">DT</span></div><div class="stat-trend up">↗ +9% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">CA du jour</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">486 500 <span style="font-size:12px; font-weight:600;">DH</span></div><div class="stat-trend up">↗ +12% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Encaissements</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">412 300 <span style="font-size:12px; font-weight:600;">DH</span></div><div class="stat-trend up">↗ +9% vs mois dernier</div></div>
           <div class="stat-card"><div class="stat-top"><span class="stat-label">Factures<br>émises</span><div class="stat-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("receipt",13)}</div></div><div class="stat-value">21</div><div class="stat-sub">aujourd'hui</div></div>
           <div class="stat-card"><div class="stat-top"><span class="stat-label">Occupation<br>des lits</span><div class="stat-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("pulse",13)}</div></div><div class="stat-value">78%</div></div>
           <div class="stat-card"><div class="stat-top"><span class="stat-label">Médecins<br>présents</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("user",13)}</div></div><div class="stat-value">34</div></div>
@@ -1642,7 +1642,7 @@ function renderDashboardExtras(){
         <div class="charts-row">
           <div class="chart-card">
             <h3>Chiffre d'affaires mensuel</h3>
-            <div class="chart-sub">CA &amp; marge (DT)</div>
+            <div class="chart-sub">CA &amp; marge (DH)</div>
             <div class="bar-chart">
               <div class="bar-col"><span class="bar-val">980K</span><div class="bar-fill" style="height:49%"></div><span class="bar-label">Sep</span></div>
               <div class="bar-col"><span class="bar-val">1140K</span><div class="bar-fill" style="height:57%"></div><span class="bar-label">Oct</span></div>
@@ -1887,7 +1887,7 @@ gp.insertAdjacentHTML("beforeend", `
     <h3>${icon("calendar",17)}Régional</h3>
     <div class="form-grid">
       <div class="fg"><label>Langue</label><select id="set-langue"><option>Français</option><option>Arabe</option><option>Anglais</option></select></div>
-      <div class="fg"><label>Devise</label><select id="set-devise"><option>DT (Dinar tunisien)</option><option>MAD (Dirham marocain)</option><option>EUR (Euro)</option></select></div>
+      <div class="fg"><label>Devise</label><select id="set-devise"><option>DH (Dirham)</option><option>EUR (Euro)</option><option>USD (Dollar)</option></select></div>
       <div class="fg"><label>Fuseau horaire</label><select id="set-fuseau"><option>Africa/Tunis (GMT+1)</option><option>Africa/Casablanca (GMT+1)</option><option>Europe/Paris (GMT+1)</option></select></div>
     </div>
     <div style="display:flex; justify-content:flex-end; margin-top:18px;">
