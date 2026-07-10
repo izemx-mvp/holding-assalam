@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holding Assalam — ERP Santé</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#052420; --navy-900:#0A362F; --navy-850:#0E453C; --navy-800:#135347; --navy-700:#1A6456;
+  --teal-500:#14B8A6; --teal-400:#2DD4BF; --teal-300:#7EEBDD; --teal-glow:rgba(45,212,191,.18);
+  --indigo-500:#2F6FE4; --indigo-400:#6FA0F5; --indigo-glow:rgba(47,111,228,.16);
+  --amber-500:#F5A524; --red-500:#F0506E; --green-500:#2FC17E;
+  --bg-app:#F2F7F6; --card:#FFFFFF; --border:#E1EAE7; --border-soft:#EDF4F2;
+  --text:#0F1F1C; --text-muted:#5D7570; --text-faint:#94A9A4;
+  --r-sm:8px; --r-md:12px; --r-lg:18px;
+  --shadow-card:0 1px 2px rgba(15,31,28,.04), 0 8px 24px -12px rgba(15,31,28,.10);
+  --holding-accent:#2F6FE4; --holding-glow:rgba(47,111,228,.14);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{font-family:"Inter",sans-serif; background:var(--bg-app); color:var(--text); -webkit-font-smoothing:antialiased; overflow:hidden;}
+h1,h2,h3{font-family:"Sora",sans-serif;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer;}
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:#C9D8D4; border-radius:8px;}
+::-webkit-scrollbar-thumb:hover{background:#AFC4BE;}
+
+.shell{display:grid; grid-template-columns:272px 1fr; height:100vh;}
+
+/* SIDEBAR */
+.sidebar{background:linear-gradient(190deg,var(--navy-950) 0%, var(--navy-900) 60%, var(--navy-850) 100%); color:#C7DAD5; display:flex; flex-direction:column; height:100vh; position:relative; border-right:1px solid rgba(255,255,255,.04);}
+.sidebar::before{content:""; position:absolute; top:-80px; right:-100px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle, var(--teal-glow) 0%, transparent 70%); pointer-events:none;}
+.brand{display:flex; align-items:center; gap:10px; padding:20px 20px 16px; border-bottom:1px solid rgba(255,255,255,.06);}
+.brand-mark{width:34px; height:34px; border-radius:10px; flex:none; background:linear-gradient(135deg,var(--teal-400),var(--indigo-500)); display:flex; align-items:center; justify-content:center; font-family:"Sora"; font-weight:800; color:#052420; font-size:15px;}
+.brand-name{font-family:"Sora"; font-weight:700; font-size:15px; color:#fff;}
+.brand-sub{font-size:10.5px; color:#7FA39A; letter-spacing:.4px; text-transform:uppercase; margin-top:1px;}
+.overview-item{margin:12px 16px 4px; display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:600; color:#A9C4BD; border:1px solid transparent; transition:.12s;}
+.overview-item svg{width:16px; height:16px;}
+.overview-item:hover{background:rgba(255,255,255,.05); color:#fff;}
+.overview-item.active{background:rgba(255,255,255,.06); color:#fff; border-color:rgba(255,255,255,.1);}
+.space-switch{margin:8px 16px 6px; display:flex; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.08); border-radius:11px; padding:3px;}
+.space-btn{flex:1; text-align:center; font-size:11.6px; font-weight:700; padding:8px 6px; border-radius:8px; color:#7FA39A; transition:.15s;}
+.space-btn.on-clinique.active{background:linear-gradient(135deg,rgba(45,212,191,.22),rgba(45,212,191,.06)); color:#fff; box-shadow:inset 0 0 0 1px rgba(45,212,191,.3);}
+.space-btn.on-holding.active{background:linear-gradient(135deg,rgba(47,111,228,.28),rgba(47,111,228,.06)); color:#fff; box-shadow:inset 0 0 0 1px rgba(47,111,228,.4);}
+.nav-scroll{flex:1; overflow-y:auto; padding:4px 12px 14px;}
+.nav-group-label{font-size:10px; text-transform:uppercase; letter-spacing:.7px; color:#5A7A72; font-weight:600; padding:14px 10px 6px;}
+.nav-item{display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:9px; font-size:13.2px; font-weight:500; color:#A9C4BD; margin-bottom:2px; transition:.12s; position:relative; border:1px solid transparent;}
+.nav-item svg{width:17px; height:17px; flex:none; opacity:.85;}
+.nav-item:hover{background:rgba(255,255,255,.05); color:#fff;}
+.nav-item.active{background:linear-gradient(90deg, rgba(45,212,191,.16), rgba(45,212,191,.03)); color:#fff; border-color:rgba(45,212,191,.25);}
+.nav-item.active svg{opacity:1; color:var(--teal-400);}
+.nav-item.active::before{content:""; position:absolute; left:-12px; top:8px; bottom:8px; width:3px; border-radius:3px; background:var(--teal-400);}
+.nav-holding .nav-item.active{background:linear-gradient(90deg, rgba(47,111,228,.22), rgba(47,111,228,.03)); border-color:rgba(47,111,228,.3);}
+.nav-holding .nav-item.active svg{color:var(--indigo-400);}
+.nav-holding .nav-item.active::before{background:var(--indigo-400);}
+.nav-item .badge-ia{margin-left:auto; font-size:9px; font-weight:700; background:var(--indigo-500); color:#fff; padding:1.5px 5px; border-radius:5px; letter-spacing:.3px;}
+.overview-item{position:relative;}
+.overview-item .badge-ia{margin-left:auto; font-size:9px; font-weight:700; color:#fff; padding:1.5px 6px; border-radius:5px; letter-spacing:.3px;}
+.nav-hidden{display:none !important;}
+.sidebar-bottom-links{padding:10px 12px 6px; border-top:1px solid rgba(255,255,255,.07); flex:none;}
+.sidebar-foot{padding:14px 18px 18px; border-top:1px solid rgba(255,255,255,.06); display:flex; align-items:center; gap:10px;}
+.avatar{width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,#1F6E60,#0E453C); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex:none;}
+.foot-name{font-size:12.5px; font-weight:600; color:#EDF7F4;}
+.foot-role{font-size:10.5px; color:#7FA39A;}
+
+/* MAIN */
+.main{display:flex; flex-direction:column; height:100vh; min-width:0;}
+.topbar{height:64px; flex:none; background:var(--card); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 26px;}
+.topbar-title{font-family:"Sora"; font-weight:700; font-size:17px; display:flex; align-items:center; gap:9px;}
+.space-tag{font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; letter-spacing:.3px; text-transform:uppercase;}
+.space-tag.clinique{color:var(--teal-500); background:var(--teal-glow);}
+.space-tag.holding{color:var(--indigo-500); background:var(--indigo-glow);}
+.topbar-sub{font-size:12px; color:var(--text-muted); margin-top:1px;}
+.topbar-right{display:flex; align-items:center; gap:10px;}
+.search-box{display:flex; align-items:center; gap:8px; background:var(--bg-app); border:1px solid var(--border); border-radius:9px; padding:8px 12px; width:230px; color:var(--text-faint); font-size:12.5px;}
+.search-box svg{width:14px; height:14px; flex:none;}
+.icon-btn{width:36px; height:36px; border-radius:9px; border:1px solid var(--border); background:var(--card); display:flex; align-items:center; justify-content:center; position:relative;}
+.icon-btn svg{width:16px; height:16px; color:var(--text-muted);}
+.icon-btn .dot{position:absolute; top:6px; right:7px; width:6px; height:6px; border-radius:50%; background:var(--red-500); border:1.5px solid var(--card);}
+.pill-ia{display:flex; align-items:center; gap:6px; background:linear-gradient(135deg, var(--indigo-glow), var(--teal-glow)); border:1px solid rgba(47,111,228,.25); color:var(--indigo-500); font-size:12px; font-weight:600; padding:7px 12px; border-radius:20px;}
+.pill-ia svg{width:13px; height:13px;}
+
+.content{flex:1; overflow-y:auto; padding:26px 30px 50px;}
+.page{display:none; animation:fade .2s ease;}
+.page.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+.page-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;}
+.page-eyebrow{font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--teal-500); margin-bottom:4px;}
+.page-eyebrow.holding{color:var(--indigo-500);}
+.page-title{font-family:"Sora"; font-weight:700; font-size:22px;}
+.page-desc{font-size:13px; color:var(--text-muted); margin-top:4px; max-width:640px;}
+.btn{display:inline-flex; align-items:center; gap:7px; padding:9px 15px; border-radius:9px; font-size:13px; font-weight:600; border:1px solid var(--border); background:var(--card); color:var(--text);}
+.btn-primary{background:var(--navy-900); color:#fff; border-color:var(--navy-900);}
+.btn-primary:hover{background:var(--navy-800);}
+.btn-ia{background:linear-gradient(135deg,var(--indigo-500),#1FA7C9); color:#fff; border:none;}
+.btn-green{background:var(--green-500); color:#fff; border:none;}
+.btn-sm{padding:6px 11px; font-size:11.8px; border-radius:7px;}
+.btn svg{width:14px; height:14px;}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
+
+/* DASHBOARD — dense stats */
+.dash-date{font-size:13px; color:var(--text-muted); margin-top:2px; margin-bottom:20px;}
+.alert-strip{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px;}
+.alert-pill{display:flex; align-items:center; gap:11px; background:var(--card); border:1px solid var(--border); border-left:4px solid var(--border); border-radius:11px; padding:12px 14px; box-shadow:var(--shadow-card);}
+.alert-pill.al-blue{border-left-color:var(--indigo-500);}
+.alert-pill.al-amber{border-left-color:var(--amber-500);}
+.alert-pill.al-red{border-left-color:var(--red-500);}
+.alert-icon{width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex:none;}
+.alert-icon svg{width:15px; height:15px;}
+.alert-icon.al-blue{background:var(--indigo-glow); color:var(--indigo-500);}
+.alert-icon.al-amber{background:rgba(245,165,36,.14); color:var(--amber-500);}
+.alert-icon.al-red{background:rgba(240,80,110,.12); color:var(--red-500);}
+.alert-text{font-size:12.6px; font-weight:600; color:var(--text); line-height:1.35;}
+
+.stat-row{display:grid; grid-template-columns:repeat(7,1fr); gap:12px; margin-bottom:14px;}
+.stat-card{background:var(--card); border:1px solid var(--border); border-radius:13px; padding:14px 15px; box-shadow:var(--shadow-card);}
+.stat-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.stat-label{font-size:9.8px; font-weight:700; letter-spacing:.3px; text-transform:uppercase; color:var(--text-faint); line-height:1.3;}
+.stat-icon{width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex:none;}
+.stat-icon svg{width:13px; height:13px;}
+.stat-value{font-family:"Sora"; font-weight:700; font-size:21px;}
+.stat-sub{font-size:10.8px; color:var(--text-muted); margin-top:3px;}
+.stat-trend{font-size:10.8px; font-weight:700; margin-top:4px; display:flex; align-items:center; gap:3px;}
+.stat-trend.up{color:var(--green-500);}
+.stat-trend.down{color:var(--red-500);}
+
+.charts-row{display:grid; grid-template-columns:1.5fr 1fr; gap:16px; margin-bottom:16px;}
+.chart-card{background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); padding:18px 20px;}
+.chart-card h3{font-size:14.5px; font-weight:700;}
+.chart-card .chart-sub{font-size:11.5px; color:var(--text-muted); margin-top:2px; margin-bottom:14px;}
+.donut-wrap{display:flex; flex-direction:column; align-items:center; gap:16px;}
+.donut{width:170px; height:170px; border-radius:50%; position:relative;}
+.donut::after{content:""; position:absolute; inset:26px; background:var(--card); border-radius:50%;}
+.donut-legend{display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; width:100%;}
+.donut-legend-item{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-muted);}
+.donut-dot{width:9px; height:9px; border-radius:3px; flex:none;}
+.line-chart-wrap{width:100%; overflow-x:auto;}
+.chart-legend-row{display:flex; gap:18px; margin-top:10px;}
+.chart-legend-item{display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-muted); font-weight:600;}
+.chart-legend-line{width:16px; height:3px; border-radius:2px;}
+.bar-chart{display:flex; align-items:flex-end; gap:10px; height:150px; padding-top:10px;}
+.bar-col{flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;}
+.bar-fill{width:100%; border-radius:6px 6px 3px 3px; background:linear-gradient(180deg,var(--teal-400),var(--teal-500)); position:relative; min-height:4px;}
+.bar-label{font-size:10px; color:var(--text-muted); text-align:center;}
+.bar-val{font-size:9.5px; font-weight:700; color:var(--text); margin-bottom:2px;}
+@media (max-width:1150px){
+  .stat-row{grid-template-columns:repeat(3,1fr);}
+  .alert-strip{grid-template-columns:repeat(2,1fr);}
+  .charts-row{grid-template-columns:1fr;}
+}
+.kpi-card{background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px 18px; box-shadow:var(--shadow-card);}
+.kpi-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.kpi-icon{width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;}
+.kpi-icon svg{width:15px; height:15px;}
+.kpi-trend{font-size:11px; font-weight:700; padding:2px 6px; border-radius:6px;}
+.trend-up{color:var(--green-500); background:rgba(47,193,126,.1);}
+.trend-down{color:var(--red-500); background:rgba(240,80,110,.1);}
+.trend-flat{color:var(--text-muted); background:var(--bg-app);}
+.kpi-value{font-family:"Sora"; font-weight:700; font-size:24px;}
+.kpi-label{font-size:12px; color:var(--text-muted); margin-top:2px;}
+
+.grid-2{display:grid; grid-template-columns:1.6fr 1fr; gap:16px; align-items:start;}
+.card{background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); overflow:hidden;}
+.card-head{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border-soft); flex-wrap:wrap; gap:10px;}
+.card-head h3{font-size:14.5px; font-weight:700;}
+.card-head .muted{font-size:11.5px; color:var(--text-muted);}
+.card-body{padding:16px 18px;}
+.filters-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+.filters-row select{padding:7px 10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-app); font-size:12px; font-family:inherit; color:var(--text);}
+
+table{width:100%; border-collapse:collapse; font-size:12.6px;}
+thead th{text-align:left; font-size:10.3px; text-transform:uppercase; letter-spacing:.4px; color:var(--text-faint); font-weight:700; padding:0 16px 10px; border-bottom:1px solid var(--border-soft);}
+tbody td{padding:11px 16px; border-bottom:1px solid var(--border-soft); color:var(--text); vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr.clickable{cursor:pointer;}
+tbody tr.clickable:hover{background:#F5FAF9;}
+.cell-strong{font-weight:600;}
+.cell-muted{color:var(--text-muted); font-size:11.6px;}
+.tag{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; white-space:nowrap;}
+.tag-green{color:var(--green-500); background:rgba(47,193,126,.1);}
+.tag-amber{color:var(--amber-500); background:rgba(245,165,36,.12);}
+.tag-red{color:var(--red-500); background:rgba(240,80,110,.1);}
+.tag-blue{color:var(--indigo-500); background:var(--indigo-glow);}
+.tag-grey{color:var(--text-muted); background:var(--bg-app);}
+.avatar-sm{width:26px; height:26px; border-radius:7px; background:var(--navy-800); color:#fff; font-size:10.5px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; margin-right:8px; flex:none;}
+.staff-chip{display:inline-flex; align-items:center; gap:6px; font-size:12px;}
+.staff-dot{width:7px; height:7px; border-radius:50%; flex:none;}
+.dot-dispo{background:var(--green-500);}
+.dot-occupe{background:var(--amber-500);}
+.dot-bloc{background:var(--indigo-500);}
+.dot-conge{background:var(--text-faint);}
+.link-btn{color:var(--indigo-500); font-weight:600; font-size:12.2px; text-decoration:underline; cursor:pointer; background:none; border:none; padding:0;}
+
+.ai-card{background:linear-gradient(165deg,var(--navy-950),var(--navy-850)); border-radius:var(--r-lg); padding:18px; color:#DDEEEA; box-shadow:var(--shadow-card); position:relative; overflow:hidden;}
+.ai-card::after{content:""; position:absolute; bottom:-60px; right:-40px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,var(--indigo-glow),transparent 70%);}
+.ai-head{display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:#fff; margin-bottom:14px;}
+.ai-head svg{width:15px; height:15px; color:var(--teal-400);}
+.ai-item{display:flex; gap:10px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,.07);}
+.ai-item:last-child{border-bottom:none; padding-bottom:0;}
+.ai-dot{width:7px; height:7px; border-radius:50%; margin-top:5px; flex:none;}
+.ai-text{font-size:12.3px; line-height:1.5; color:#C3DAD5;}
+.ai-text b{color:#fff;}
+.ai-meta{font-size:10.5px; color:#6E8983; margin-top:3px;}
+
+.agent-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+.agent-card{background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); padding:18px; box-shadow:var(--shadow-card); display:flex; flex-direction:column; gap:12px;}
+.agent-top{display:flex; align-items:flex-start; justify-content:space-between;}
+.agent-icon{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg,var(--indigo-500),#1FA7C9); display:flex; align-items:center; justify-content:center;}
+.agent-icon svg{width:18px; height:18px; color:#fff;}
+.switch{width:36px; height:20px; border-radius:20px; background:var(--border); position:relative; cursor:pointer; transition:.15s; flex:none;}
+.switch.on{background:var(--teal-500);}
+.switch::after{content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:.15s; box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.switch.on::after{left:18px;}
+.agent-name{font-weight:700; font-size:14px;}
+.agent-desc{font-size:12.3px; color:var(--text-muted); line-height:1.5;}
+.agent-metric{background:var(--bg-app); border-radius:9px; padding:9px 11px; font-size:12px; display:flex; justify-content:space-between; align-items:center;}
+.agent-metric b{font-family:"JetBrains Mono"; font-size:12.5px;}
+.agent-foot{font-size:10.8px; color:var(--text-faint); margin-top:2px;}
+
+.holding-hero{background:linear-gradient(120deg,var(--navy-950) 0%, var(--navy-850) 55%, var(--navy-800) 100%); border-radius:var(--r-lg); padding:22px 24px; margin-bottom:20px; color:#fff; position:relative; overflow:hidden;}
+.holding-hero::before{content:""; position:absolute; top:-120px; left:20%; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,var(--teal-glow),transparent 65%);}
+.hh-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; position:relative;}
+.hh-title{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--teal-300); font-weight:700; margin-bottom:5px;}
+.hh-sub{font-size:13px; color:#B7D6CF; max-width:520px;}
+.hh-consolid{font-family:"Sora"; font-size:30px; font-weight:800;}
+.clinic-strip{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; position:relative;}
+.clinic-chip{background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:13px 14px; cursor:pointer; transition:.15s;}
+.clinic-chip:hover{background:rgba(255,255,255,.09);}
+.cc-name{font-size:12.5px; font-weight:700; color:#fff; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:8px;}
+.cc-bar{height:5px; border-radius:4px; background:rgba(255,255,255,.1); overflow:hidden; margin-bottom:8px;}
+.cc-bar span{display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--teal-400),var(--indigo-400));}
+.cc-stats{display:flex; justify-content:space-between; font-size:11px; color:#9FC0B8;}
+.cc-stats b{color:#EDF7F4; font-family:"JetBrains Mono"; font-weight:500;}
+.progress-mini{width:60px; height:6px; border-radius:4px; background:var(--border-soft); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:6px;}
+.progress-mini span{display:block; height:100%; background:var(--teal-500);}
+
+.footnote{margin-top:26px; padding:14px 18px; border-radius:var(--r-md); background:#FCF6E9; border:1px solid #F3E3B8; font-size:12px; color:#8A6A1E; display:flex; gap:10px; align-items:flex-start;}
+.footnote svg{width:15px; height:15px; flex:none; margin-top:1px;}
+.breadcrumb{font-size:12px; color:var(--text-muted); margin-bottom:14px;}
+.breadcrumb .crumb{color:var(--indigo-500); font-weight:600; cursor:pointer;}
+.breadcrumb .crumb:hover{text-decoration:underline;}
+
+/* MODAL */
+.modal-overlay{position:fixed; inset:0; background:rgba(5,36,32,.55); backdrop-filter:blur(2px); display:none; align-items:flex-start; justify-content:center; z-index:200; padding:40px 20px; overflow-y:auto;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--card); border-radius:var(--r-lg); max-width:600px; width:100%; box-shadow:0 30px 80px rgba(0,0,0,.3); margin-bottom:40px;}
+.modal-box.wide{max-width:920px;}
+.modal-head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border-soft);}
+.modal-head h3{font-size:15.5px; font-weight:700;}
+.modal-head .sub{font-size:11.5px; color:var(--text-muted); margin-top:2px; font-weight:400; font-family:"Inter";}
+.modal-close{width:30px; height:30px; border-radius:8px; background:var(--bg-app); display:flex; align-items:center; justify-content:center; border:none; flex:none;}
+.modal-close svg{width:14px; height:14px; color:var(--text-muted);}
+.modal-body{padding:20px 22px;}
+.modal-foot{display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border-soft);}
+.form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.fg{display:flex; flex-direction:column; gap:6px;}
+.fg.span2{grid-column:1/-1;}
+.fg label{font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.3px;}
+.fg input,.fg select,.fg textarea{padding:10px 12px; border-radius:9px; border:1px solid var(--border); background:var(--bg-app); font-size:13px; font-family:inherit; color:var(--text); width:100%;}
+.fg textarea{resize:vertical; min-height:64px;}
+.tabs{display:flex; gap:4px; border-bottom:1px solid var(--border-soft); margin-bottom:16px; flex-wrap:wrap;}
+.tab-btn{padding:9px 13px; font-size:12.4px; font-weight:600; color:var(--text-muted); border-bottom:2px solid transparent;}
+.tab-btn.active{color:var(--indigo-500); border-color:var(--indigo-500);}
+.detail-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; margin-bottom:4px;}
+.detail-item .dl{font-size:10.5px; text-transform:uppercase; letter-spacing:.3px; color:var(--text-faint); margin-bottom:3px;}
+.detail-item .dv{font-size:13px; font-weight:600;}
+.mini-list{display:flex; flex-direction:column; gap:8px;}
+.mini-row{display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--bg-app); border-radius:9px; font-size:12.2px; gap:10px;}
+.ai-suggest-box{background:linear-gradient(135deg,var(--indigo-glow),var(--teal-glow)); border:1px solid rgba(47,111,228,.25); border-radius:11px; padding:14px 16px; margin-top:14px; font-size:12.4px; display:none;}
+.ai-suggest-box.show{display:block;}
+.ai-suggest-box ul{margin:8px 0 0; padding-left:18px;}
+.ai-suggest-box li{margin-bottom:3px;}
+
+/* CALENDAR */
+.day-tabs{display:flex; gap:8px; margin-bottom:16px;}
+.day-tab{padding:8px 16px; border-radius:20px; font-size:12.5px; font-weight:600; background:var(--bg-app); border:1px solid var(--border); color:var(--text-muted);}
+.day-tab.active{background:var(--navy-900); color:#fff; border-color:var(--navy-900);}
+.cal-wrap{overflow-x:auto;}
+.cal-grid{display:grid; grid-template-columns:180px repeat(7,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); border-radius:12px; overflow:hidden; min-width:920px;}
+.cal-cell{background:var(--card); padding:9px 6px;}
+.cal-head{background:var(--navy-900); color:#fff; font-weight:700; text-align:center; font-size:11px; padding:10px 4px;}
+.cal-doc{background:var(--bg-app); display:flex; align-items:center; gap:8px; font-weight:600; font-size:11.6px;}
+.slot{cursor:pointer; text-align:center; border-radius:6px; padding:9px 4px; font-size:10.4px; font-weight:600; transition:.12s; border:none; width:100%;}
+.slot-libre{background:rgba(47,193,126,.1); color:var(--green-500);}
+.slot-libre:hover{background:rgba(47,193,126,.22);}
+.slot-occupe{background:rgba(245,165,36,.1); color:var(--amber-500); cursor:not-allowed;}
+.slot-bloc{background:var(--indigo-glow); color:var(--indigo-500); cursor:not-allowed;}
+.slot-conge{background:var(--border-soft); color:var(--text-faint); cursor:not-allowed;}
+.slot-rdv{background:var(--navy-900); color:#fff; cursor:not-allowed; font-size:9.6px; line-height:1.2;}
+.legend{display:flex; gap:16px; margin-top:14px; flex-wrap:wrap;}
+.legend-item{display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--text-muted);}
+.legend-dot{width:10px; height:10px; border-radius:4px;}
+
+@media (max-width:1150px){
+  .kpi-row{grid-template-columns:repeat(2,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+  .agent-grid{grid-template-columns:repeat(2,1fr);}
+  .clinic-strip{grid-template-columns:repeat(2,1fr);}
+  .form-grid{grid-template-columns:1fr;}
+}
+.toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--navy-900); color:#fff; padding:12px 20px; border-radius:11px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:9px; box-shadow:0 12px 30px rgba(0,0,0,.25); opacity:0; pointer-events:none; transition:.25s; z-index:300; max-width:420px;}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+.toast svg{width:15px; height:15px; color:var(--teal-400); flex:none;}
+
+/* NOTIFICATIONS */
+.notif-card{display:flex; gap:14px; align-items:flex-start; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; border-left:3px solid transparent;}
+.notif-card.unread{border-left-color:var(--teal-500); background:#F5FBFA;}
+.notif-icon{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex:none;}
+.notif-icon svg{width:16px; height:16px;}
+.notif-icon.red{background:rgba(240,80,110,.12); color:var(--red-500);}
+.notif-icon.amber{background:rgba(245,165,36,.14); color:var(--amber-500);}
+.notif-icon.blue{background:var(--indigo-glow); color:var(--indigo-500);}
+.notif-icon.green{background:rgba(47,193,126,.12); color:var(--green-500);}
+.notif-title-row{display:flex; align-items:center; gap:7px;}
+.notif-title{font-weight:700; font-size:14px;}
+.notif-unread-dot{width:6px; height:6px; border-radius:50%; background:var(--teal-500); flex:none;}
+.notif-desc{font-size:12.6px; color:var(--text-muted); margin-top:3px;}
+.notif-time{font-size:11px; color:var(--text-faint); margin-top:5px;}
+
+/* SETTINGS */
+.settings-card{background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); padding:20px 22px; margin-bottom:16px; box-shadow:var(--shadow-card);}
+.settings-card h3{display:flex; align-items:center; gap:9px; font-size:15px; font-weight:700; margin-bottom:16px;}
+.settings-card h3 svg{width:17px; height:17px; color:var(--text-muted);}
+.mode-select{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.mode-btn{display:flex; align-items:center; justify-content:center; gap:9px; padding:14px; border-radius:11px; border:1.5px solid var(--border); background:var(--bg-app); font-weight:600; font-size:13.5px; color:var(--text-muted);}
+.mode-btn svg{width:16px; height:16px;}
+.mode-btn.active{border-color:var(--teal-500); background:var(--teal-glow); color:var(--teal-500);}
+.settings-toggle-row{display:flex; align-items:center; justify-content:space-between; padding:13px 0; border-bottom:1px solid var(--border-soft);}
+.settings-toggle-row:last-child{border-bottom:none;}
+.settings-toggle-row .stt{font-weight:700; font-size:13.5px;}
+.settings-toggle-row .std{font-size:12px; color:var(--text-muted); margin-top:2px;}
+
+/* TIMELINE (admin journal) */
+.timeline{display:flex; flex-direction:column;}
+.tl-item{display:flex; gap:12px; padding-bottom:16px; position:relative;}
+.tl-item::before{content:""; position:absolute; left:5px; top:16px; bottom:-2px; width:1.5px; background:var(--border);}
+.tl-item:last-child::before{display:none;}
+.tl-dot{width:11px; height:11px; border-radius:50%; border:2.5px solid var(--card); box-shadow:0 0 0 1.5px var(--border); flex:none; margin-top:2px; z-index:1;}
+.tl-body{font-size:12.6px; line-height:1.5;}
+.tl-body b{font-weight:700;}
+.tl-time{font-size:10.8px; color:var(--text-faint); margin-top:2px;}
+
+/* DARK MODE (toggled on <body>) */
+body.dark-mode{
+  --bg-app:#0B141C; --card:#131E28; --border:#223140; --border-soft:#1B2A36;
+  --text:#EAF1F4; --text-muted:#93A7B2; --text-faint:#5F7784;
+}
+body.dark-mode .notif-card.unread{background:#101C24;}
+body.dark-mode .search-box{color:#6C818C;}
+body.dark-mode .mode-btn{background:#0F1922;}
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div><div class="brand-name">Holding Assalam</div><div class="brand-sub">ERP Santé Multi-cliniques</div></div>
+    </div>
+
+    <div class="overview-item" id="overviewBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Vue d'ensemble
+    </div>
+
+    <div class="space-switch">
+      <div class="space-btn on-clinique active" id="btnSpaceClinique" onclick="setSpace('clinique')">Espace Clinique</div>
+      <div class="space-btn on-holding" id="btnSpaceHolding" onclick="setSpace('holding')">Espace Holding</div>
+    </div>
+
+    <nav class="nav-scroll">
+      <div class="nav-clinique">
+        <div class="nav-group-label">Parcours patient</div>
+        <div class="nav-item" data-page="orientation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/></svg>Orientation IA</div>
+        <div class="nav-item" data-page="patients"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M17 8h4M19 6v4"/></svg>Patients &amp; admissions</div>
+        <div class="nav-item" data-page="rdv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Rendez-vous &amp; calendrier</div>
+        <div class="nav-item" data-page="dme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Dossier médical (DME)</div>
+        <div class="nav-item" data-page="hospitalisation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M6 9V6a1 1 0 011-1h3a1 1 0 011 1v3"/></svg>Hospitalisation &amp; lits</div>
+        <div class="nav-group-label">Plateaux médico-techniques</div>
+        <div class="nav-item" data-page="labo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6M10 3v6l-5.5 9.5A1.5 1.5 0 006 21h12a1.5 1.5 0 001.3-2.5L14 9V3"/></svg>Laboratoire &amp; analyses</div>
+        <div class="nav-item" data-page="imagerie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/></svg>Imagerie médicale</div>
+        <div class="nav-item" data-page="pharmacie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></svg>Pharmacie &amp; stock local</div>
+        <div class="nav-item" data-page="bloc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.5 3.5l-6 6M14.5 9.5L4 20l-2-2L12.5 7.5M17 6l1.5 1.5"/></svg>Bloc opératoire</div>
+        <div class="nav-group-label">Clôture &amp; ressources</div>
+        <div class="nav-item" data-page="facturation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Facturation patient</div>
+        <div class="nav-item" data-page="personnel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3.5"/><path d="M2 21c0-3.5 3-6.3 7-6.3s7 2.8 7 6.3M17 8h5M19.5 5.5v5"/></svg>Personnel &amp; disponibilités</div>
+      </div>
+      <div class="nav-holding nav-hidden">
+        <div class="nav-group-label">Pilotage groupe</div>
+        <div class="nav-item" data-page="portefeuille"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V7l6-4 6 4v14M10 21v-6h4v6"/></svg>Portefeuille cliniques</div>
+        <div class="nav-item" data-page="reporting"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 15l4-5 3 3 5-7"/></svg>Reporting &amp; BI</div>
+        <div class="nav-group-label">Fonctions support groupe</div>
+        <div class="nav-item" data-page="rh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="3.5"/><path d="M2 21c0-3.5 3-6.3 7-6.3s7 2.8 7 6.3M17 8h5M19.5 5.5v5"/></svg>RH Groupe</div>
+        <div class="nav-item" data-page="stocks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8"/></svg>Achats &amp; stocks groupe</div>
+        <div class="nav-group-label">Intelligence artificielle</div>
+        <div class="nav-item" data-page="ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/></svg>Centre des agents IA</div>
+      </div>
+    </nav>
+
+    <div class="sidebar-bottom-links">
+      <div class="overview-item" id="notifBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+        Notifications
+        <span class="badge-ia" id="notifNavBadge" style="background:var(--red-500);">3</span>
+      </div>
+      <div class="overview-item" id="adminBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Administration
+      </div>
+      <div class="overview-item" id="paramsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/><circle cx="12" cy="12" r="3.5"/></svg>
+        Paramètres
+      </div>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar">TE</div>
+      <div><div class="foot-name">Tarik El Houari</div><div class="foot-role">Responsable Holding Assalam</div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title"><span id="topTitle">Vue d'ensemble</span><span class="space-tag clinique" id="topSpaceTag" style="display:none;">Clinique</span></div>
+        <div class="topbar-sub" id="topSub">Vue consolidée · 4 établissements</div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Rechercher…</div>
+        <button class="icon-btn" id="bellBtn" onclick="go('notifications')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg><span class="dot" id="bellDot"></span></button>
+        <div class="pill-ia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/></svg>6 agents IA actifs</div>
+      </div>
+    </div>
+    <div class="content" id="content">
+      <section class="page active" id="page-dashboard">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title" style="font-size:26px;">Tableau de bord</h1>
+            <div class="dash-date">vendredi 10 juillet 2026 · Vue d'ensemble en temps réel</div>
+          </div>
+        </div>
+
+        <div id="dashExtras"></div>
+
+        <div class="holding-hero">
+          <div class="hh-top">
+            <div>
+              <div class="hh-title">Holding Assalam — vue consolidée</div>
+              <div class="hh-consolid">4,86 M DT</div>
+              <div class="hh-sub">Chiffre d'affaires consolidé du mois — 4 établissements. Responsable holding : Tarik El Houari.</div>
+            </div>
+            <button class="btn btn-ia" onclick="go('orientation')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/></svg>Tester l'orientation IA</button>
+          </div>
+          <div class="clinic-strip">
+            <div class="clinic-chip" onclick="openPortefeuille('Les Oliviers')"><div class="cc-name">Clinique Les Oliviers <span style="color:#7EEBDD; font-size:11px; font-weight:700;">92%</span></div><div class="cc-bar"><span style="width:92%"></span></div><div class="cc-stats"><span>Occ. lits</span><b>82/89</b></div></div>
+            <div class="clinic-chip" onclick="openPortefeuille('Atlas')"><div class="cc-name">Clinique Atlas <span style="color:#7EEBDD; font-size:11px; font-weight:700;">78%</span></div><div class="cc-bar"><span style="width:78%"></span></div><div class="cc-stats"><span>Occ. lits</span><b>64/82</b></div></div>
+            <div class="clinic-chip" onclick="openPortefeuille('Al Andalous')"><div class="cc-name">Clinique Al Andalous <span style="color:#F5C97A; font-size:11px; font-weight:700;">58%</span></div><div class="cc-bar"><span style="width:58%"></span></div><div class="cc-stats"><span>Occ. lits</span><b>41/70</b></div></div>
+            <div class="clinic-chip" onclick="openPortefeuille('Ennasr')"><div class="cc-name">Polyclinique Ennasr <span style="color:#7EEBDD; font-size:11px; font-weight:700;">87%</span></div><div class="cc-bar"><span style="width:87%"></span></div><div class="cc-stats"><span>Occ. lits</span><b>62/71</b></div></div>
+          </div>
+        </div>
+        <div class="footnote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>Prototype MVP à usage de cadrage pour Holding Assalam — données fictives, en mémoire (réinitialisées au rechargement).</div>
+      </section>
+      <div id="genericPages"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-head">
+      <div><h3 id="modalTitle">Titre</h3><div class="sub" id="modalSub"></div></div>
+      <button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg><span id="toastText">Action confirmée</span></div>
+
+<script>
+/* ================= UTILS ================= */
+const ICONS = {
+  user:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>',
+  users:'<circle cx="9" cy="7" r="3.5"/><path d="M2 21c0-3.5 3-6.3 7-6.3s7 2.8 7 6.3M17 8h5M19.5 5.5v5"/>',
+  building:'<path d="M3 21h18M6 21V7l6-4 6 4v14M10 21v-6h4v6"/>',
+  sparkle:'<path d="M12 2l1.6 4.9L19 8l-4.9 1.6L12 15l-1.6-5.4L5 8l5.4-1.1L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.6.8-2.4z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  check:'<path d="M20 6L9 17l-5-5"/>',
+  pulse:'<path d="M3 12h4l2-8 4 16 2-8h6"/>',
+  bed:'<path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M6 9V6a1 1 0 011-1h3a1 1 0 011 1v3"/>',
+  cross:'<path d="M12 8v8M8 12h8"/><circle cx="12" cy="12" r="9"/>',
+  scissors:'<path d="M20.5 3.5l-6 6M14.5 9.5L4 20l-2-2L12.5 7.5M17 6l1.5 1.5"/>',
+  scan:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5-9 9"/>',
+  flask:'<path d="M9 3h6M10 3v6l-5.5 9.5A1.5 1.5 0 006 21h12a1.5 1.5 0 001.3-2.5L14 9V3"/>',
+  wallet:'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>',
+  receipt:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  wifi:'<path d="M5 13a10 10 0 0114 0M8.5 16.5a5 5 0 017 0M12 20h.01"/>',
+  alert:'<path d="M12 9v4M12 17h.01M10.3 3.9L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>',
+};
+function icon(name, sz=15){ return `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="currentColor" stroke-width="2.1">${ICONS[name]||""}</svg>`; }
+function toast(msg){
+  const t=document.getElementById("toast");
+  document.getElementById("toastText").textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 3400);
+}
+function statusTag(val){
+  const v = (val||"").toLowerCase();
+  let cls = "tag-grey";
+  if(/urgent|critique|rupture|refus|tension|sous-effectif/.test(v)) cls="tag-red";
+  else if(/attente|cours|surveill|à confirmer|proposée/.test(v)) cls="tag-amber";
+  else if(/valid|confirm|ok|dispon|termin|payée|cohérent|couvert|normal|clôtur/.test(v)) cls="tag-green";
+  else if(/bloc|assign|planifi|salle/.test(v)) cls="tag-blue";
+  return `<span class="tag ${cls}">${val}</span>`;
+}
+function initials(name){ return (name||"").replace(/^(Dr\\.|Mme|M\\.)\\s*/,"").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
+let __idCounter = 9000;
+function nextId(prefix){ __idCounter++; return prefix+"-"+__idCounter; }
+
+/* ================= MODAL ENGINE ================= */
+function openModal(title, sub, bodyHtml, footHtml, wide){
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalSub").textContent = sub||"";
+  document.getElementById("modalBody").innerHTML = bodyHtml;
+  document.getElementById("modalFoot").innerHTML = footHtml||"";
+  document.getElementById("modalBox").className = "modal-box" + (wide?" wide":"");
+  document.getElementById("modalOverlay").classList.add("show");
+}
+function closeModal(){ document.getElementById("modalOverlay").classList.remove("show"); }
+document.getElementById("modalOverlay").addEventListener("click", e=>{ if(e.target.id==="modalOverlay") closeModal(); });
+function switchTab(groupId, tabKey){
+  document.querySelectorAll(`#${groupId} .tab-btn`).forEach(b=>b.classList.toggle("active", b.dataset.tab===tabKey));
+  document.querySelectorAll(`#${groupId}-panes .tab-pane`).forEach(p=>p.classList.toggle("active", p.dataset.tab===tabKey));
+}
+
+/* ================= STAFF ================= */
+const STAFF = [
+  {id:"belhassen", name:"Dr. Amine Belhassen", role:"Cardiologue", clinic:"Les Oliviers", status:"dispo", charge:"4/8", next:"Immédiat (10:30)"},
+  {id:"zouari", name:"Dr. Leila Zouari", role:"Cardiologue", clinic:"Atlas", status:"bloc", charge:"6/6", next:"14:00 (en bloc)"},
+  {id:"ferjani", name:"Dr. Ines Ferjani", role:"Chirurgien orthopédiste", clinic:"Atlas", status:"dispo", charge:"3/7", next:"Immédiat (09:45)"},
+  {id:"sfar", name:"Dr. Mehdi Sfar", role:"Chirurgien orthopédiste", clinic:"Les Oliviers", status:"conge", charge:"—", next:"En congé"},
+  {id:"sassi", name:"Dr. Sonia Sassi", role:"Gynécologue-obstétricienne", clinic:"Ennasr", status:"dispo", charge:"2/10", next:"Immédiat (09:15)"},
+  {id:"neji", name:"Dr. Hela Néji", role:"Gynécologue-obstétricienne", clinic:"Ennasr", status:"occupe", charge:"8/8", next:"13:00 (agenda complet)"},
+  {id:"trabelsi", name:"Dr. Yassine Trabelsi", role:"Chirurgien viscéral", clinic:"Al Andalous", status:"bloc", charge:"5/5", next:"15:30 (en bloc)"},
+  {id:"chakroun", name:"Dr. Nabil Chakroun", role:"Urgentiste", clinic:"Ennasr", status:"dispo", charge:"5/12", next:"Immédiat"},
+  {id:"karray", name:"Dr. Karim Karray", role:"Radiologue", clinic:"Al Andalous", status:"dispo", charge:"6/10", next:"11:00"},
+  {id:"bouzid", name:"Dr. Emna Bouzid", role:"Radiologue", clinic:"Les Oliviers", status:"dispo", charge:"4/9", next:"10:00"},
+  {id:"aouadi", name:"Mme Rania Aouadi", role:"Infirmière responsable de bloc", clinic:"Al Andalous", status:"dispo", charge:"—", next:"—"},
+  {id:"jaziri", name:"M. Fares Jaziri", role:"Anesthésiste", clinic:"Al Andalous", status:"dispo", charge:"2/4", next:"11:30"},
+  {id:"kammoun", name:"Mme Dorra Kammoun", role:"Pharmacienne responsable", clinic:"Les Oliviers", status:"dispo", charge:"—", next:"—"},
+  {id:"guesmi", name:"M. Walid Guesmi", role:"Technicien laboratoire", clinic:"Atlas", status:"dispo", charge:"12/20", next:"Immédiat"},
+];
+const STAFF_BY_ID = Object.fromEntries(STAFF.map(s=>[s.id,s]));
+const STATUS_LABEL = {dispo:"Disponible", occupe:"Occupé", bloc:"En bloc", conge:"En congé"};
+const STATUS_DOT = {dispo:"dot-dispo", occupe:"dot-occupe", bloc:"dot-bloc", conge:"dot-conge"};
+const CLINICS = ["Les Oliviers","Atlas","Al Andalous","Ennasr"];
+
+/* ================= GENERIC CRUD ENGINE ================= */
+const CRUD = {};
+function opt(list){ return list.map(v=>`<option value="${v}">${v}</option>`).join(""); }
+function renderCrud(key){
+  const cfg = CRUD[key];
+  const listCols = cfg.fields.filter(f=>!f.hideInList);
+  const thead = listCols.map(f=>`<th>${f.label}</th>`).join("") + (cfg.rowActionRender?"<th></th>":"");
+  const rows = cfg.records.map(r=>{
+    const tds = listCols.map(f=>{
+      let val = r[f.key];
+      if(f.type==="status") val = statusTag(val);
+      if(f.strong) val = `<b class="cell-strong">${val}</b>`;
+      return `<td>${val!==undefined?val:""}</td>`;
+    }).join("") + (cfg.rowActionRender?`<td>${cfg.rowActionRender(r)}</td>`:"");
+    return `<tr class="clickable" onclick="openCrudDetail('${key}','${r.id}')">${tds}</tr>`;
+  }).join("");
+  const tableEl = document.getElementById("crud-table-"+key);
+  if(tableEl) tableEl.innerHTML = `<thead><tr>${thead}</tr></thead><tbody>${rows}</tbody>`;
+  const countEl = document.getElementById("crud-count-"+key);
+  if(countEl) countEl.textContent = cfg.records.length + " enregistrement(s)";
+}
+function openCrudDetail(key, id){
+  const cfg = CRUD[key];
+  const rec = cfg.records.find(r=>r.id===id);
+  if(!rec) return;
+  const grid = cfg.fields.map(f=>{
+    let val = f.type==="status" ? statusTag(rec[f.key]) : (rec[f.key]!==undefined && rec[f.key]!=="" ? rec[f.key] : "—");
+    return `<div class="detail-item"><div class="dl">${f.label}</div><div class="dv">${val}</div></div>`;
+  }).join("");
+  let extra = "";
+  if(cfg.renderExtra) extra = cfg.renderExtra(rec);
+  openModal(cfg.title+" — "+ (rec[cfg.titleField]||rec.id), rec.id, `<div class="detail-grid">${grid}</div>${extra}`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
+}
+function openCrudAdd(key){
+  const cfg = CRUD[key];
+  const editable = cfg.fields.filter(f=>f.editable!==false);
+  const fields = editable.map(f=>{
+    const wide = f.wide ? "span2" : "";
+    if(f.type==="select"){
+      return `<div class="fg ${wide}"><label>${f.label}</label><select id="add-${key}-${f.key}">${opt(f.options)}</select></div>`;
+    }
+    if(f.type==="textarea"){
+      return `<div class="fg span2"><label>${f.label}</label><textarea id="add-${key}-${f.key}" placeholder="${f.placeholder||""}"></textarea></div>`;
+    }
+    return `<div class="fg ${wide}"><label>${f.label}</label><input type="${f.type==='number'?'number':'text'}" id="add-${key}-${f.key}" placeholder="${f.placeholder||""}"></div>`;
+  }).join("");
+  const extra = cfg.customAddExtra ? cfg.customAddExtra() : "";
+  openModal("Ajouter — "+cfg.title, "", `<div class="form-grid">${fields}</div>${extra}`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitCrudAdd('${key}')">${icon('check',14)}Enregistrer</button>`, cfg.wideForm);
+}
+function submitCrudAdd(key){
+  const cfg = CRUD[key];
+  const editable = cfg.fields.filter(f=>f.editable!==false);
+  const rec = {id: nextId(cfg.prefix)};
+  let missing = false;
+  editable.forEach(f=>{
+    const el = document.getElementById(`add-${key}-${f.key}`);
+    const val = el ? el.value.trim() : "";
+    if(f.required && !val) missing = true;
+    rec[f.key] = val;
+  });
+  if(missing){ toast("Merci de compléter les champs obligatoires."); return; }
+  if(cfg.defaults) Object.assign(rec, cfg.defaults(rec));
+  cfg.records.unshift(rec);
+  renderCrud(key);
+  closeModal();
+  toast(cfg.title+" ajouté(e) avec succès.");
+  if(cfg.afterAdd) cfg.afterAdd(rec);
+}
+
+/* ================= PATIENTS ================= */
+const PATIENTS = [
+  {id:"P-1001", name:"Mouna Ben Salah", age:52, sexe:"F", clinic:"Les Oliviers", tel:"+216 20 123 456", groupe:"A+", allergies:"Pénicilline", antecedents:"HTA, diabète type 2", statut:"Hospitalisée",
+   consultations:[{date:"09/07/2026", motif:"Douleur thoracique", medecin:"Dr. Amine Belhassen"}],
+   examens:[{date:"09/07/2026", type:"Troponine (Labo)", resultat:"Positive — critique"}],
+   factures:[{num:"FC-91820", date:"09/07/2026", montant:"1 240 DT", statut:"Payée"}]},
+  {id:"P-1002", name:"Karim Tlili", age:34, sexe:"M", clinic:"Atlas", tel:"+216 22 456 789", groupe:"O-", allergies:"Aucune connue", antecedents:"RAS", statut:"En observation",
+   consultations:[{date:"09/07/2026", motif:"Traumatisme bras", medecin:"Dr. Ines Ferjani"}],
+   examens:[{date:"09/07/2026", type:"Radio bras", resultat:"Fracture confirmée"}],
+   factures:[{num:"FC-91818", date:"09/07/2026", montant:"380 DT", statut:"En attente"}]},
+  {id:"P-1003", name:"Sonia Haddad", age:29, sexe:"F", clinic:"Ennasr", tel:"+216 24 789 123", groupe:"B+", allergies:"Aucune connue", antecedents:"Grossesse en cours (28 SA)", statut:"Consultation",
+   consultations:[{date:"09/07/2026", motif:"Suivi de grossesse", medecin:"Dr. Sonia Sassi"}],
+   examens:[{date:"09/07/2026", type:"Échographie obstétricale", resultat:"Normale"}],
+   factures:[{num:"FC-91805", date:"09/07/2026", montant:"620 DT", statut:"Rejet à corriger"}]},
+  {id:"P-1004", name:"Ahmed Riahi", age:61, sexe:"M", clinic:"Al Andalous", tel:"+216 25 321 654", groupe:"AB+", allergies:"Iode", antecedents:"Chirurgie appendicite (2019)", statut:"Sortie prévue",
+   consultations:[{date:"08/07/2026", motif:"Bilan pré-opératoire", medecin:"Dr. Yassine Trabelsi"}],
+   examens:[{date:"08/07/2026", type:"Ionogramme", resultat:"Normal"}],
+   factures:[{num:"FC-91811", date:"08/07/2026", montant:"4 950 DT", statut:"Payée"}]},
+  {id:"P-1005", name:"Nadia Jendoubi", age:45, sexe:"F", clinic:"Les Oliviers", tel:"+216 27 963 852", groupe:"O+", allergies:"Latex", antecedents:"Antécédent cardiaque familial", statut:"Critique",
+   consultations:[{date:"09/07/2026", motif:"Douleur thoracique aiguë", medecin:"Dr. Amine Belhassen"}],
+   examens:[{date:"09/07/2026", type:"NFS + CRP", resultat:"Critique — alerte envoyée"}],
+   factures:[]},
+];
+function renderPatients(){
+  const tbody = PATIENTS.map(p=>`
+    <tr class="clickable" onclick="openPatientFiche('${p.id}')">
+      <td><span class="avatar-sm">${initials(p.name)}</span><b class="cell-strong">${p.name}</b></td>
+      <td class="cell-muted">${p.age} ans · ${p.sexe}</td>
+      <td>${p.clinic}</td>
+      <td class="cell-muted">${p.tel}</td>
+      <td>${statusTag(p.statut)}</td>
+    </tr>`).join("");
+  document.getElementById("patientsTable").innerHTML =
+    `<thead><tr><th>Patient</th><th>Âge / Sexe</th><th>Clinique</th><th>Téléphone</th><th>Statut</th></tr></thead><tbody>${tbody}</tbody>`;
+  document.getElementById("patientsCount").textContent = PATIENTS.length + " patient(s)";
+}
+function openPatientFiche(id){
+  const p = PATIENTS.find(x=>x.id===id);
+  if(!p) return;
+  const body = `
+    <div class="tabs" id="pf-tabs">
+      <div class="tab-btn active" data-tab="info" onclick="switchTab('pf-tabs','info')">Identité</div>
+      <div class="tab-btn" data-tab="hist" onclick="switchTab('pf-tabs','hist')">Consultations</div>
+      <div class="tab-btn" data-tab="exam" onclick="switchTab('pf-tabs','exam')">Examens</div>
+      <div class="tab-btn" data-tab="fact" onclick="switchTab('pf-tabs','fact')">Factures</div>
+    </div>
+    <div id="pf-tabs-panes">
+      <div class="tab-pane active" data-tab="info">
+        <div class="detail-grid">
+          <div class="detail-item"><div class="dl">Âge / Sexe</div><div class="dv">${p.age} ans · ${p.sexe}</div></div>
+          <div class="detail-item"><div class="dl">Clinique</div><div class="dv">${p.clinic}</div></div>
+          <div class="detail-item"><div class="dl">Téléphone</div><div class="dv">${p.tel}</div></div>
+          <div class="detail-item"><div class="dl">Groupe sanguin</div><div class="dv">${p.groupe}</div></div>
+          <div class="detail-item"><div class="dl">Allergies</div><div class="dv">${p.allergies}</div></div>
+          <div class="detail-item"><div class="dl">Statut actuel</div><div class="dv">${statusTag(p.statut)}</div></div>
+          <div class="detail-item" style="grid-column:1/-1;"><div class="dl">Antécédents</div><div class="dv">${p.antecedents}</div></div>
+        </div>
+      </div>
+      <div class="tab-pane" data-tab="hist">
+        <div class="mini-list">${p.consultations.length? p.consultations.map(c=>`<div class="mini-row"><span><b>${c.motif}</b> — ${c.medecin}</span><span class="cell-muted">${c.date}</span></div>`).join("") : '<div class="cell-muted">Aucune consultation enregistrée.</div>'}</div>
+      </div>
+      <div class="tab-pane" data-tab="exam">
+        <div class="mini-list">${p.examens.length? p.examens.map(e=>`<div class="mini-row"><span><b>${e.type}</b> — ${e.resultat}</span><span class="cell-muted">${e.date}</span></div>`).join("") : '<div class="cell-muted">Aucun examen enregistré.</div>'}</div>
+      </div>
+      <div class="tab-pane" data-tab="fact">
+        <div class="mini-list">${p.factures.length? p.factures.map(f=>`<div class="mini-row"><span><b>${f.num}</b> — ${f.montant}</span>${statusTag(f.statut)}</div>`).join("") : '<div class="cell-muted">Aucune facture enregistrée.</div>'}</div>
+      </div>
+    </div>`;
+  openModal("Fiche patient — "+p.name, p.id, body, `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`, true);
+}
+function openPatientAdd(){
+  const body = `<div class="form-grid">
+    <div class="fg"><label>Nom complet *</label><input id="np-name" placeholder="Ex. Yassine Kort"></div>
+    <div class="fg"><label>Âge</label><input id="np-age" type="number" placeholder="Ex. 40"></div>
+    <div class="fg"><label>Sexe</label><select id="np-sexe"><option>F</option><option>M</option></select></div>
+    <div class="fg"><label>Clinique</label><select id="np-clinic">${opt(CLINICS)}</select></div>
+    <div class="fg"><label>Téléphone</label><input id="np-tel" placeholder="+216 ..."></div>
+    <div class="fg"><label>Groupe sanguin</label><input id="np-groupe" placeholder="Ex. A+"></div>
+    <div class="fg span2"><label>Allergies connues</label><input id="np-allergies" placeholder="Ex. Aucune connue"></div>
+    <div class="fg span2"><label>Antécédents</label><textarea id="np-antecedents" placeholder="Antécédents médicaux..."></textarea></div>
+  </div>`;
+  openModal("Ajouter un patient", "Entrée / admission", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitPatientAdd()">${icon('check',14)}Créer le dossier</button>`);
+}
+function submitPatientAdd(){
+  const name = document.getElementById("np-name").value.trim();
+  if(!name){ toast("Le nom du patient est obligatoire."); return; }
+  const p = {
+    id: nextId("P"), name, age: document.getElementById("np-age").value||"—", sexe: document.getElementById("np-sexe").value,
+    clinic: document.getElementById("np-clinic").value, tel: document.getElementById("np-tel").value||"—",
+    groupe: document.getElementById("np-groupe").value||"—", allergies: document.getElementById("np-allergies").value||"Aucune connue",
+    antecedents: document.getElementById("np-antecedents").value||"RAS", statut:"Admis", consultations:[], examens:[], factures:[]
+  };
+  PATIENTS.unshift(p);
+  renderPatients();
+  closeModal();
+  toast("Patient "+name+" admis et dossier créé.");
+}
+
+/* ================= RDV — CALENDRIER + IA ================= */
+const TIME_SLOTS = ["08:00","09:00","10:00","11:00","14:00","15:00","16:00"];
+const DOCS_CAL = STAFF.filter(s=>s.name.startsWith("Dr."));
+const SPECIALTY_MAP = [
+  {key:"thorax", label:"Douleur thoracique aiguë", match:/cardiolog/i},
+  {key:"fracture", label:"Traumatisme / fracture", match:/orthopéd/i},
+  {key:"grossesse", label:"Suivi de grossesse", match:/gynécolog/i},
+  {key:"abdo", label:"Douleur abdominale aiguë", match:/urgent|viscéral/i},
+  {key:"imagerie", label:"Besoin d'imagerie", match:/radiolog/i},
+];
+function buildDaySchedule(seedBusy){
+  const sch = {};
+  DOCS_CAL.forEach(d=>{
+    sch[d.id] = {};
+    TIME_SLOTS.forEach(t=> sch[d.id][t] = d.status==="conge" ? {status:"conge"} : {status:"libre"});
+    if(d.status==="bloc"){ sch[d.id][TIME_SLOTS[TIME_SLOTS.length-1]] = {status:"bloc"}; sch[d.id][TIME_SLOTS[TIME_SLOTS.length-2]] = {status:"bloc"}; }
+    if(d.status==="occupe"){ TIME_SLOTS.forEach((t,i)=>{ if(i%2===0) sch[d.id][t] = {status:"occupe"}; }); }
+  });
+  seedBusy.forEach(([docId, slot, patient])=>{ if(sch[docId]) sch[docId][slot] = {status:"rdv", patient}; });
+  return sch;
+}
+const SCHEDULE = {
+  today: buildDaySchedule([["belhassen","08:00","Y. Kort"],["ferjani","09:00","R. Chaabane"],["sassi","09:00","S. Haddad"]]),
+  tomorrow: buildDaySchedule([["belhassen","09:00","W. Ammar"],["karray","11:00","H. Mansour"]]),
+};
+let currentDay = "today";
+const CONGES = [
+  {id:"CG-1", staff:"Dr. Mehdi Sfar", debut:"07/07/2026", fin:"11/07/2026", motif:"Congé annuel", status:"Validé"},
+  {id:"CG-2", staff:"Dr. Hela Néji", debut:"12/07/2026", fin:"13/07/2026", motif:"Formation", status:"En attente"},
+];
+function renderCalendar(){
+  document.querySelectorAll(".day-tab").forEach(b=> b.classList.toggle("active", b.dataset.day===currentDay));
+  const sch = SCHEDULE[currentDay];
+  let grid = `<div class="cal-cell cal-head">Médecin</div>` + TIME_SLOTS.map(t=>`<div class="cal-cell cal-head">${t}</div>`).join("");
+  DOCS_CAL.forEach(d=>{
+    grid += `<div class="cal-cell cal-doc"><span class="staff-dot ${STATUS_DOT[d.status]}"></span>${d.name.replace("Dr. ","Dr ")}<span class="cell-muted" style="margin-left:4px;">· ${d.role.split(" ")[0]}</span></div>`;
+    TIME_SLOTS.forEach(t=>{
+      const cell = sch[d.id][t];
+      let cls="slot-libre", label="Libre";
+      if(cell.status==="occupe"){ cls="slot-occupe"; label="Occupé"; }
+      if(cell.status==="bloc"){ cls="slot-bloc"; label="Bloc"; }
+      if(cell.status==="conge"){ cls="slot-conge"; label="Congé"; }
+      if(cell.status==="rdv"){ cls="slot-rdv"; label=cell.patient; }
+      const clickable = cell.status==="libre";
+      grid += `<div class="cal-cell"><button class="slot ${cls}" ${clickable?`onclick="openRdvForm('${d.id}','${t}')"`:"disabled"}>${label}</button></div>`;
+    });
+  });
+  document.getElementById("calGrid").innerHTML = grid;
+}
+function setDay(day){ currentDay = day; renderCalendar(); }
+function openRdvForm(prefDoc, prefSlot){
+  const body = `
+    <div class="form-grid">
+      <div class="fg span2"><label>Nom du patient *</label><input id="rdv-patient" placeholder="Ex. Hedi Mansour"></div>
+      <div class="fg span2"><label>Motif de consultation</label>
+        <select id="rdv-motif" onchange="document.getElementById('rdv-ai-box').classList.remove('show')">
+          <option value="">— Sélectionner —</option>
+          ${SPECIALTY_MAP.map(s=>`<option value="${s.key}">${s.label}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fg"><label>Médecin</label><select id="rdv-doc">${DOCS_CAL.map(d=>`<option value="${d.id}" ${d.id===prefDoc?"selected":""}>${d.name} — ${d.role}</option>`).join("")}</select></div>
+      <div class="fg"><label>Créneau</label><select id="rdv-slot">${TIME_SLOTS.map(t=>`<option value="${t}" ${t===prefSlot?"selected":""}>${t}</option>`).join("")}</select></div>
+    </div>
+    <button class="btn btn-ia" style="margin-top:14px;" onclick="suggestRdvAI()">${icon("sparkle",14)}Suggérer via l'agent IA</button>
+    <div class="ai-suggest-box" id="rdv-ai-box"></div>`;
+  openModal("Nouveau rendez-vous", currentDay==="today"?"Aujourd'hui":"Demain", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitRdv()">${icon("check",14)}Confirmer le RDV</button>`);
+}
+function suggestRdvAI(){
+  const motifKey = document.getElementById("rdv-motif").value;
+  if(!motifKey){ toast("Sélectionnez un motif pour que l'IA puisse analyser le cas."); return; }
+  const spec = SPECIALTY_MAP.find(s=>s.key===motifKey);
+  const sch = SCHEDULE[currentDay];
+  let candidates = DOCS_CAL.filter(d=>spec.match.test(d.role));
+  let best=null, bestSlot=null, tried=[];
+  candidates.forEach(d=>{
+    for(const t of TIME_SLOTS){
+      if(sch[d.id][t].status==="libre"){ if(!best){ best=d; bestSlot=t; } tried.push(`${d.name} (${STATUS_LABEL[d.status]==="Disponible"?"disponible":STATUS_LABEL[d.status]}) — créneau libre le plus proche : ${t}`); break; }
+    }
+    if(![...tried].some(x=>x.startsWith(d.name))) tried.push(`${d.name} — aucun créneau libre aujourd'hui (${STATUS_LABEL[d.status]})`);
+  });
+  const box = document.getElementById("rdv-ai-box");
+  if(!best){
+    box.innerHTML = `<b>Aucun praticien disponible</b> pour « ${spec.label} » sur ce jour. Essayez « Demain » ou élargissez la recherche.`;
+    box.classList.add("show");
+    return;
+  }
+  document.getElementById("rdv-doc").value = best.id;
+  document.getElementById("rdv-slot").value = bestSlot;
+  box.innerHTML = `<b>Spécialité requise : ${best.role}</b><ul>${tried.map(t=>`<li>${t}</li>`).join("")}<li><b>${best.name} retenu</b> — créneau ${bestSlot}, charge actuelle ${best.charge}.</li></ul>`;
+  box.classList.add("show");
+}
+function submitRdv(){
+  const patient = document.getElementById("rdv-patient").value.trim();
+  if(!patient){ toast("Le nom du patient est obligatoire."); return; }
+  const docId = document.getElementById("rdv-doc").value;
+  const slot = document.getElementById("rdv-slot").value;
+  const sch = SCHEDULE[currentDay];
+  if(sch[docId][slot].status!=="libre"){ toast("Ce créneau n'est plus disponible, choisissez-en un autre."); return; }
+  sch[docId][slot] = {status:"rdv", patient};
+  renderCalendar();
+  closeModal();
+  toast("RDV confirmé pour "+patient+" avec "+STAFF_BY_ID[docId].name+" à "+slot+".");
+}
+function renderConges(){
+  const tbody = CONGES.map(c=>`<tr><td><b class="cell-strong">${c.staff}</b></td><td class="cell-muted">${c.debut} → ${c.fin}</td><td>${c.motif}</td><td>${statusTag(c.status)}</td>
+    <td>${c.status==="En attente" ? `<button class="btn btn-sm btn-green" onclick="validerConge('${c.id}')">${icon("check",12)}Valider</button>` : ""}</td></tr>`).join("");
+  document.getElementById("congesTable").innerHTML = `<thead><tr><th>Personnel</th><th>Période</th><th>Motif</th><th>Statut</th><th></th></tr></thead><tbody>${tbody}</tbody>`;
+}
+function validerConge(id){
+  const c = CONGES.find(x=>x.id===id);
+  c.status = "Validé";
+  renderConges();
+  toast("Congé validé pour "+c.staff+".");
+}
+function openCongeForm(){
+  const body = `<div class="form-grid">
+    <div class="fg span2"><label>Membre du personnel</label><select id="cg-staff">${STAFF.map(s=>`<option value="${s.name}">${s.name} — ${s.role}</option>`).join("")}</select></div>
+    <div class="fg"><label>Date de début</label><input id="cg-debut" placeholder="jj/mm/aaaa"></div>
+    <div class="fg"><label>Date de fin</label><input id="cg-fin" placeholder="jj/mm/aaaa"></div>
+    <div class="fg span2"><label>Motif</label><input id="cg-motif" placeholder="Ex. Congé annuel, formation, maladie..."></div>
+  </div>`;
+  openModal("Demande de congé / absence", "", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitConge()">${icon("check",14)}Soumettre la demande</button>`);
+}
+function submitConge(){
+  const staff = document.getElementById("cg-staff").value;
+  const debut = document.getElementById("cg-debut").value.trim() || "—";
+  const fin = document.getElementById("cg-fin").value.trim() || "—";
+  const motif = document.getElementById("cg-motif").value.trim() || "Non précisé";
+  CONGES.unshift({id: nextId("CG"), staff, debut, fin, motif, status:"En attente"});
+  renderConges();
+  closeModal();
+  toast("Demande de congé soumise pour validation.");
+}
+
+/* ================= ACHATS GROUPE ================= */
+const ACHATS_QUEUE = [
+  {id:"BC-3378", fournisseur:"MedSupply Tunisie", produit:"Consommables bloc", cliniques:"4 cliniques (mutualisé)", montant:"214 000 DT", statut:"En validation", origine:"Manuel"},
+  {id:"BC-3372", fournisseur:"TechMed Equip.", produit:"Matériel d'imagerie", cliniques:"Al Andalous", montant:"112 000 DT", statut:"Validée", origine:"Manuel"},
+];
+function renderAchats(){
+  const tbody = ACHATS_QUEUE.map(a=>`<tr class="clickable" onclick="openAchatDetail('${a.id}')">
+    <td><b class="cell-strong">${a.id}</b></td><td>${a.fournisseur}</td><td>${a.produit}</td><td class="cell-muted">${a.cliniques}</td><td>${a.montant}</td><td>${statusTag(a.statut)}</td>
+    <td>${a.origine==="Agent IA"?'<span class="tag tag-blue">Agent IA</span>':'<span class="tag tag-grey">Manuel</span>'}</td>
+    <td>${a.statut==="À confirmer" ? `<button class="btn btn-sm btn-green" onclick="event.stopPropagation(); confirmerAchat('${a.id}')">${icon("check",12)}Confirmer</button>` : ""}</td>
+    </tr>`).join("");
+  document.getElementById("achatsTable").innerHTML = `<thead><tr><th>N° BC</th><th>Fournisseur</th><th>Produit</th><th>Cliniques</th><th>Montant</th><th>Statut</th><th>Origine</th><th></th></tr></thead><tbody>${tbody}</tbody>`;
+}
+function confirmerAchat(id){
+  const a = ACHATS_QUEUE.find(x=>x.id===id);
+  a.statut = "Validée";
+  renderAchats();
+  toast("Commande "+id+" confirmée et transmise au fournisseur "+a.fournisseur+".");
+}
+function openAchatDetail(id){
+  const a = ACHATS_QUEUE.find(x=>x.id===id);
+  const body = `<div class="detail-grid">
+    <div class="detail-item"><div class="dl">Fournisseur</div><div class="dv">${a.fournisseur}</div></div>
+    <div class="detail-item"><div class="dl">Montant</div><div class="dv">${a.montant}</div></div>
+    <div class="detail-item"><div class="dl">Cliniques concernées</div><div class="dv">${a.cliniques}</div></div>
+    <div class="detail-item"><div class="dl">Statut</div><div class="dv">${statusTag(a.statut)}</div></div>
+    <div class="detail-item"><div class="dl">Origine</div><div class="dv">${a.origine==="Agent IA"?'<span class="tag tag-blue">Agent Réappro.</span>':'<span class="tag tag-grey">Manuel</span>'}</div></div>
+    <div class="detail-item"><div class="dl">Produit</div><div class="dv">${a.produit}</div></div>
+  </div>`;
+  const foot = a.statut==="À confirmer"
+    ? `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button><button class="btn btn-green" onclick="confirmerAchat('${a.id}'); closeModal();">${icon("check",14)}Confirmer l'achat</button>`
+    : `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`;
+  openModal("Commande "+a.id, "", body, foot);
+}
+function envoyerAlerteAchat(produit, stockLocal, seuil){
+  const id = nextId("BC");
+  const montantEstime = (Math.round((seuil-stockLocal)*35))+" DT";
+  ACHATS_QUEUE.unshift({id, fournisseur:"PharmaDistrib (fournisseur habituel)", produit, cliniques:"Les Oliviers (réappro. urgent)", montant:montantEstime, statut:"À confirmer", origine:"Agent IA"});
+  renderAchats();
+  toast("Alerte transmise à l'Agent Achats : commande "+id+" générée automatiquement, en attente de votre confirmation (Espace Holding → Achats & stocks groupe).");
+}
+
+/* ================= PORTEFEUILLE CLINIQUES (Exercices / Journal / Bilan / CPC / Documents) ================= */
+const CLINIC_PROFILES = {
+  "Les Oliviers": {responsable:"Dr. Amine Belhassen (Directeur médical)", ville:"Tunis"},
+  "Atlas": {responsable:"Dr. Leila Zouari (Directrice médicale)", ville:"Sfax"},
+  "Al Andalous": {responsable:"Dr. Yassine Trabelsi (Directeur médical)", ville:"Sousse"},
+  "Ennasr": {responsable:"Dr. Sonia Sassi (Directrice médicale)", ville:"Ariana"},
+};
+const BASE_FIN = {
+  "Les Oliviers": {caProd:22000, achats:6200, personnel:9800, amort:1200, autresCharges:1300, immobilisations:14000, stocks:1800, creances:3200, tresorerie:2600, capitauxPropres:12000, dettesFin:4500, dettesFourn:3200, autresDettes:1900},
+  "Atlas": {caProd:15800, achats:4600, personnel:7400, amort:900, autresCharges:1000, immobilisations:9800, stocks:1300, creances:2400, tresorerie:1500, capitauxPropres:8200, dettesFin:3400, dettesFourn:2300, autresDettes:1100},
+  "Al Andalous": {caProd:10300, achats:3600, personnel:5300, amort:700, autresCharges:800, immobilisations:7200, stocks:900, creances:1700, tresorerie:600, capitauxPropres:4800, dettesFin:3100, dettesFourn:1800, autresDettes:700},
+  "Ennasr": {caProd:10100, achats:2800, personnel:4600, amort:600, autresCharges:700, immobilisations:6400, stocks:850, creances:1600, tresorerie:1400, capitauxPropres:5600, dettesFin:2100, dettesFourn:1500, autresDettes:650},
+};
+function getFinancials(clinic, year){
+  const b = BASE_FIN[clinic];
+  const factor = year===2026?1 : year===2025?0.93 : year===2024?0.86 : 0.80;
+  const f = k=> Math.round(b[k]*factor);
+  const produits=f("caProd"), achats=f("achats"), personnel=f("personnel"), amort=f("amort"), autresCharges=f("autresCharges");
+  const chargesTotal = achats+personnel+amort+autresCharges;
+  const resultatExpl = produits-chargesTotal;
+  const resultatNet = Math.round(resultatExpl*0.82);
+  const immobilisations=f("immobilisations"), stocks=f("stocks"), creances=f("creances"), tresorerie=f("tresorerie");
+  const totalActif = immobilisations+stocks+creances+tresorerie;
+  const capitauxPropres=f("capitauxPropres"), dettesFin=f("dettesFin"), dettesFourn=f("dettesFourn"), autresDettes=f("autresDettes");
+  const totalPassif = capitauxPropres+dettesFin+dettesFourn+autresDettes;
+  return {produits,achats,personnel,amort,autresCharges,chargesTotal,resultatExpl,resultatNet,immobilisations,stocks,creances,tresorerie,totalActif,capitauxPropres,dettesFin,dettesFourn,autresDettes,totalPassif};
+}
+const JOURNAL = [
+  {id:"J-0001", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"411000 Clients", libelle:"Facture prestations de soins", debit:"980 DT", credit:"", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Constatation de la créance client suite à la facture FC-90211."},
+  {id:"J-0002", date:"05/06/2026", mois:"2026-06", clinique:"Les Oliviers", piece:"FC-90211", compte:"706000 Prestations de soins", libelle:"Facture prestations de soins", debit:"", credit:"980 DT", justificatif:"FC-90211", origine:"Agent Comptable", explication:"Comptabilisation du produit d'exploitation lié à la facture FC-90211."},
+  {id:"J-0003", date:"18/06/2026", mois:"2026-06", clinique:"Atlas", piece:"OD-004", compte:"616000 Primes d'assurance", libelle:"Régularisation assurance RC", debit:"1 200 DT", credit:"", justificatif:"Pièce manuelle", origine:"Manuel", explication:"Régularisation de la prime d'assurance responsabilité civile du 2e trimestre."},
+];
+function generateJournalId(){ __idCounter++; return "J-"+String(__idCounter).padStart(4,"0"); }
+function monthLabel(m){ const map={"2026-07":"Juillet 2026","2026-06":"Juin 2026","2026-05":"Mai 2026"}; return map[m]||m; }
+function openJustificatif(num){
+  const invoice = CRUD.facturation.records.find(r=>r.id===num);
+  if(!invoice){ toast("Pièce "+num+" (justificatif manuel, non liée à une facture)."); return; }
+  openCrudDetail("facturation", invoice.id);
+}
+function exporterVersSage(clinic, year){
+  const filtered = JOURNAL.filter(j=> j.clinique===clinic && j.mois.startsWith(String(year)) && (pfMonth==="Tous"||j.mois===pfMonth));
+  if(filtered.length===0){ toast("Aucune écriture à exporter pour ce filtre."); return; }
+  let csv = "Journal;Date;Compte;Libelle;Piece;Debit;Credit\n";
+  filtered.forEach(j=>{
+    const compteNum = j.compte.split(" ")[0];
+    const libelle = (j.explication||j.libelle).replace(/;/g,",");
+    const deb = (j.debit||"").replace(" DT","").replace(/\s/g,"").replace(",",".");
+    const cred = (j.credit||"").replace(" DT","").replace(/\s/g,"").replace(",",".");
+    csv += ["VE", j.date, compteNum, libelle, j.piece, deb, cred].join(";") + "\n";
+  });
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "export_sage_"+clinic.replace(/\s/g,"_")+"_"+year+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(filtered.length+" écriture(s) exportée(s) au format d'import Sage.");
+}
+function genererEcrituresIA(){
+  const nonJournalisees = CRUD.facturation.records.filter(r=>r.journalized!==true);
+  if(nonJournalisees.length===0){ toast("Aucune nouvelle facture à comptabiliser — toutes les écritures sont à jour."); return; }
+  nonJournalisees.forEach(inv=>{
+    const clinique = inv.clinique || "Les Oliviers";
+    const montant = inv.montant;
+    JOURNAL.unshift({id:generateJournalId(), date:"09/07/2026", mois:"2026-07", clinique, piece:inv.id, compte:"411000 Clients", libelle:"Facture "+inv.origine, debit:montant, credit:"", justificatif:inv.id, origine:"Agent Comptable", explication:"Constatation de la créance client suite à la facture "+inv.id+" ("+inv.patient+")."});
+    JOURNAL.unshift({id:generateJournalId(), date:"09/07/2026", mois:"2026-07", clinique, piece:inv.id, compte:"706000 Prestations de soins", libelle:"Facture "+inv.origine, debit:"", credit:montant, justificatif:inv.id, origine:"Agent Comptable", explication:"Comptabilisation du produit d'exploitation lié à la facture "+inv.id+" ("+inv.origine+")."});
+    inv.journalized = true;
+  });
+  renderCrud("facturation");
+  renderPortefeuille();
+  toast("Agent Comptable : "+(nonJournalisees.length*2)+" écritures générées depuis "+nonJournalisees.length+" facture(s).");
+}
+
+let pfView = "list", pfClinic = null, pfExercice = null, pfTab = "journal", pfMonth = "Tous";
+function openPortefeuille(clinicName){ pfClinic=clinicName; pfView="clinic"; go("portefeuille"); renderPortefeuille(); }
+function pfGoList(){ pfView="list"; pfClinic=null; pfExercice=null; renderPortefeuille(); }
+function pfGoClinic(){ pfView="clinic"; pfExercice=null; renderPortefeuille(); }
+function openExercice(year){ pfExercice=year; pfView="exercice"; pfTab="journal"; pfMonth="Tous"; renderPortefeuille(); }
+function setPfTab(tab){ pfTab=tab; renderPortefeuille(); }
+function setPfMonth(m){ pfMonth=m; renderPortefeuille(); }
+
+function pfListHtml(){
+  const cards = CLINICS.map(c=>{
+    const fin = getFinancials(c,2026);
+    return `<div class="clinic-chip" style="background:var(--navy-900); border-color:var(--navy-700);" onclick="openPortefeuille('${c}')">
+      <div class="cc-name">${c}</div>
+      <div class="cell-muted" style="color:#9FC0B8; font-size:11px; margin-bottom:8px;">${CLINIC_PROFILES[c].ville} · Responsable : ${CLINIC_PROFILES[c].responsable}</div>
+      <div class="cc-stats"><span>CA annuel 2026</span><b>${fin.produits} K DT</b></div>
+    </div>`;
+  }).join("");
+  return `<div class="page-head"><div><h1 class="page-title">Portefeuille cliniques</h1><p class="page-desc">Cliquez une clinique pour accéder à ses exercices comptables : saisie/journal, bilan, CPC et documents.</p></div></div>
+    <div class="clinic-strip">${cards}</div>`;
+}
+function pfClinicHtml(clinic){
+  const p = CLINIC_PROFILES[clinic];
+  const finY = getFinancials(clinic,2026);
+  const exCards = [2026,2025,2024,2023].map(y=>{
+    const statut = y===2026?"En cours":"Clôturé";
+    return `<div class="clinic-chip" style="background:var(--card); border:1px solid var(--border); cursor:pointer;" onclick="openExercice(${y})">
+      <div class="cc-name" style="color:var(--text);">Exercice ${y} ${statusTag(statut)}</div>
+      <div class="cell-muted" style="font-size:11.5px;">Journal, bilan, CPC et documents de l'exercice</div>
+    </div>`;
+  }).join("");
+  return `<div class="breadcrumb"><span class="crumb" onclick="pfGoList()">Portefeuille cliniques</span> / ${clinic}</div>
+    <div class="page-head"><div><h1 class="page-title">${clinic}</h1><p class="page-desc">${p.ville} · Responsable : ${p.responsable}</p></div></div>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.produits} K DT</div><div class="kpi-label">Produits d'exploitation 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.resultatNet} K DT</div><div class="kpi-label">Résultat net 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,165,36,.12); color:var(--amber-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${finY.totalActif} K DT</div><div class="kpi-label">Total Actif 2026</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">4</div><div class="kpi-label">Exercices disponibles</div></div>
+    </div>
+    <div class="card-head" style="padding:0 0 12px; border:none;"><h3>Exercices comptables</h3></div>
+    <div class="clinic-strip">${exCards}</div>`;
+}
+function pfJournalHtml(clinic, year){
+  const months = Array.from(new Set(JOURNAL.filter(j=>j.clinique===clinic && j.mois.startsWith(String(year))).map(j=>j.mois))).sort();
+  const filtered = JOURNAL.filter(j=> j.clinique===clinic && j.mois.startsWith(String(year)) && (pfMonth==="Tous"||j.mois===pfMonth));
+  const rows = filtered.map(j=>`<tr><td class="cell-muted">${j.date}</td><td><button class="link-btn" onclick="openJustificatif('${j.justificatif}')">${j.piece}</button></td><td>${j.compte}</td><td class="cell-muted">${j.explication||j.libelle}</td><td>${j.debit}</td><td>${j.credit}</td><td>${j.origine==="Agent Comptable"?'<span class="tag tag-blue">Agent Comptable</span>':'<span class="tag tag-grey">Manuel</span>'}</td></tr>`).join("");
+  return `<div class="card"><div class="card-head"><h3>Saisie comptable — Journal ${year}</h3>
+    <div class="filters-row">
+      <select onchange="setPfMonth(this.value)"><option value="Tous" ${pfMonth==="Tous"?"selected":""}>Tous les mois</option>${months.map(m=>`<option value="${m}" ${pfMonth===m?"selected":""}>${monthLabel(m)}</option>`).join("")}</select>
+      <button class="btn btn-ia btn-sm" onclick="genererEcrituresIA()">${icon("sparkle",12)}Générer les écritures (Agent IA)</button>
+      <button class="btn btn-primary btn-sm" onclick="exporterVersSage('${clinic}',${year})">${icon("check",12)}Exporter vers Sage</button>
+    </div></div>
+    <div class="card-body" style="padding:0;"><table><thead><tr><th>Date</th><th>Pièce</th><th>Compte</th><th>Explication</th><th>Débit</th><th>Crédit</th><th>Origine</th></tr></thead><tbody>${rows||'<tr><td colspan="7" class="cell-muted" style="padding:20px;">Aucune écriture pour ce filtre.</td></tr>'}</tbody></table></div></div>`;
+}
+function pfBilanHtml(fin, year){
+  return `<div class="grid-2">
+    <div class="card"><div class="card-head"><h3>Actif — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
+      <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
+      <tr><td>Immobilisations corporelles</td><td>${fin.immobilisations} K DT</td></tr>
+      <tr><td>Stocks</td><td>${fin.stocks} K DT</td></tr>
+      <tr><td>Créances clients</td><td>${fin.creances} K DT</td></tr>
+      <tr><td>Trésorerie</td><td>${fin.tresorerie} K DT</td></tr>
+      <tr><td class="cell-strong">Total Actif</td><td class="cell-strong">${fin.totalActif} K DT</td></tr>
+      </tbody></table></div></div>
+    <div class="card"><div class="card-head"><h3>Passif — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
+      <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
+      <tr><td>Capitaux propres</td><td>${fin.capitauxPropres} K DT</td></tr>
+      <tr><td>Dettes financières</td><td>${fin.dettesFin} K DT</td></tr>
+      <tr><td>Dettes fournisseurs</td><td>${fin.dettesFourn} K DT</td></tr>
+      <tr><td>Autres dettes</td><td>${fin.autresDettes} K DT</td></tr>
+      <tr><td class="cell-strong">Total Passif</td><td class="cell-strong">${fin.totalPassif} K DT</td></tr>
+      </tbody></table></div></div>
+  </div>`;
+}
+function pfCpcHtml(fin, year){
+  return `<div class="card"><div class="card-head"><h3>Compte de Produits et Charges (CPC) — Exercice ${year}</h3></div><div class="card-body" style="padding:0;"><table>
+    <thead><tr><th>Poste</th><th>Montant</th></tr></thead><tbody>
+    <tr><td class="cell-strong">Produits d'exploitation</td><td class="cell-strong">${fin.produits} K DT</td></tr>
+    <tr><td>Achats consommés (médicaments, consommables)</td><td>-${fin.achats} K DT</td></tr>
+    <tr><td>Charges de personnel</td><td>-${fin.personnel} K DT</td></tr>
+    <tr><td>Dotations aux amortissements</td><td>-${fin.amort} K DT</td></tr>
+    <tr><td>Autres charges d'exploitation</td><td>-${fin.autresCharges} K DT</td></tr>
+    <tr><td class="cell-strong">Résultat d'exploitation</td><td class="cell-strong">${fin.resultatExpl} K DT</td></tr>
+    <tr><td class="cell-strong">Résultat net de l'exercice</td><td class="cell-strong" style="color:var(--teal-500);">${fin.resultatNet} K DT</td></tr>
+    </tbody></table></div></div>`;
+}
+function pfDocsHtml(clinic, year){
+  const items = [
+    {label:"Bilan comptable", act:"setPfTab('bilan')"},
+    {label:"Compte de Produits et Charges (CPC)", act:"setPfTab('cpc')"},
+    {label:"Grand livre", act:`openDocPlaceholder('Grand livre','${clinic}',${year})`},
+    {label:"Balance générale", act:`openDocPlaceholder('Balance générale','${clinic}',${year})`},
+    {label:"Liasse fiscale", act:`openDocPlaceholder('Liasse fiscale','${clinic}',${year})`},
+    {label:"Annexes comptables", act:`openDocPlaceholder('Annexes comptables','${clinic}',${year})`},
+  ];
+  const rows = items.map(it=>`<div class="mini-row"><span><b>${it.label}</b></span><button class="btn btn-sm btn-ghost" onclick="${it.act}">Consulter</button></div>`).join("");
+  return `<div class="card"><div class="card-head"><h3>Documents comptables — Exercice ${year}</h3></div><div class="card-body"><div class="mini-list">${rows}</div></div></div>`;
+}
+function openDocPlaceholder(name, clinic, year){
+  const body = `<div class="detail-grid">
+    <div class="detail-item"><div class="dl">Clinique</div><div class="dv">${clinic}</div></div>
+    <div class="detail-item"><div class="dl">Exercice</div><div class="dv">${year}</div></div>
+    <div class="detail-item"><div class="dl">Origine</div><div class="dv"><span class="tag tag-blue">Agent Comptable</span></div></div>
+    <div class="detail-item"><div class="dl">Format</div><div class="dv">PDF</div></div>
+  </div>`;
+  openModal(name, clinic+" — Exercice "+year, body, `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button><button class="btn btn-primary" onclick="toast('${name} téléchargé.')">Télécharger</button>`);
+}
+function pfExerciceHtml(clinic, year){
+  const fin = getFinancials(clinic, year);
+  const statutEx = year===2026 ? "En cours" : "Clôturé";
+  const tabs = `<div class="tabs">
+    <div class="tab-btn ${pfTab==='journal'?'active':''}" onclick="setPfTab('journal')">Saisie comptable / Journal</div>
+    <div class="tab-btn ${pfTab==='bilan'?'active':''}" onclick="setPfTab('bilan')">Bilan comptable</div>
+    <div class="tab-btn ${pfTab==='cpc'?'active':''}" onclick="setPfTab('cpc')">CPC</div>
+    <div class="tab-btn ${pfTab==='docs'?'active':''}" onclick="setPfTab('docs')">Documents comptables</div>
+  </div>`;
+  let body = "";
+  if(pfTab==="journal") body = pfJournalHtml(clinic, year);
+  else if(pfTab==="bilan") body = pfBilanHtml(fin, year);
+  else if(pfTab==="cpc") body = pfCpcHtml(fin, year);
+  else body = pfDocsHtml(clinic, year);
+  return `<div class="breadcrumb"><span class="crumb" onclick="pfGoList()">Portefeuille cliniques</span> / <span class="crumb" onclick="pfGoClinic()">${clinic}</span> / Exercice ${year}</div>
+    <div class="page-head"><div><h1 class="page-title">${clinic} — Exercice ${year}</h1><p class="page-desc">Statut de l'exercice : ${statusTag(statutEx)}</p></div></div>
+    ${tabs}${body}`;
+}
+function renderPortefeuille(){
+  const root = document.getElementById("pfRoot");
+  if(!root) return;
+  if(pfView==="clinic") root.innerHTML = pfClinicHtml(pfClinic);
+  else if(pfView==="exercice") root.innerHTML = pfExerciceHtml(pfClinic, pfExercice);
+  else root.innerHTML = pfListHtml();
+}
+
+/* ================= RH — DÉTAIL SERVICE ================= */
+const RH_SERVICES = [
+  {id:"RH1", service:"Soins infirmiers", clinic:"Les Oliviers", effectif:214, couverture:"96%", statut:"Couvert"},
+  {id:"RH2", service:"Urgences", clinic:"Al Andalous", effectif:72, couverture:"79%", statut:"Sous-effectif"},
+  {id:"RH3", service:"Bloc opératoire", clinic:"Atlas", effectif:58, couverture:"88%", statut:"Tension"},
+  {id:"RH4", service:"Administration", clinic:"Ennasr", effectif:44, couverture:"100%", statut:"Couvert"},
+];
+function renderRH(){
+  const rows = RH_SERVICES.map(s=>`<tr class="clickable" onclick="openServiceDetail('${s.id}')"><td class="cell-strong">${s.service}</td><td>${s.clinic}</td><td>${s.effectif}</td><td>${s.couverture}</td><td>${statusTag(s.statut)}</td></tr>`).join("");
+  document.getElementById("rhTable").innerHTML = `<thead><tr><th>Service</th><th>Clinique</th><th>Effectif</th><th>Couverture</th><th>Statut</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function optimiserRHIA(){
+  const sorted = [...RH_SERVICES].sort((a,b)=>parseInt(a.couverture)-parseInt(b.couverture));
+  const pire = sorted[0], meilleur = sorted[sorted.length-1];
+  toast("Agent RH : transfert recommandé de 2 effectifs de "+meilleur.service+" ("+meilleur.clinic+") vers "+pire.service+" ("+pire.clinic+") pour combler le sous-effectif.");
+}
+const REPORTS = [
+  {rapport:"Performance financière consolidée", perimetre:"Holding", frequence:"Mensuel", statut:"Disponible"},
+  {rapport:"Occupation lits & flux patients", perimetre:"Par clinique", frequence:"Quotidien", statut:"Disponible"},
+];
+function renderReporting(){
+  const rows = REPORTS.map(r=>`<tr><td class="cell-strong">${r.rapport}</td><td>${r.perimetre}</td><td>${r.frequence}</td><td>${statusTag(r.statut)}</td></tr>`).join("");
+  document.getElementById("reportingTable").innerHTML = `<thead><tr><th>Rapport</th><th>Périmètre</th><th>Fréquence</th><th>Statut</th></tr></thead><tbody>${rows}</tbody>`;
+}
+function genererRapportIA(){
+  REPORTS.unshift({rapport:"Synthèse hebdomadaire — générée le 09/07/2026", perimetre:"Holding", frequence:"Ponctuel", statut:"Disponible"});
+  renderReporting();
+  toast("Agent Reporting : nouveau rapport généré et ajouté à la liste.");
+}
+function openServiceDetail(id){
+  const s = RH_SERVICES.find(x=>x.id===id);
+  const staffList = STAFF.filter(m=>m.clinic===s.clinic);
+  const congesClinic = CONGES.filter(c=> staffList.some(m=>m.name===c.staff));
+  const body = `<div class="detail-grid">
+    <div class="detail-item"><div class="dl">Clinique</div><div class="dv">${s.clinic}</div></div>
+    <div class="detail-item"><div class="dl">Effectif</div><div class="dv">${s.effectif}</div></div>
+    <div class="detail-item"><div class="dl">Couverture planning</div><div class="dv">${s.couverture}</div></div>
+    <div class="detail-item"><div class="dl">Statut</div><div class="dv">${statusTag(s.statut)}</div></div>
+  </div>
+  <div style="margin-top:16px;"><div class="card-head" style="padding:0 0 10px; border:none;"><h3>Personnel de la clinique</h3></div>
+  <div class="mini-list">${staffList.length?staffList.map(m=>`<div class="mini-row"><span><b>${m.name}</b> — ${m.role}</span><span class="staff-chip"><span class="staff-dot ${STATUS_DOT[m.status]}"></span>${STATUS_LABEL[m.status]}</span></div>`).join(""):'<div class="cell-muted">Aucun profil enregistré.</div>'}</div></div>
+  <div style="margin-top:16px;"><div class="card-head" style="padding:0 0 10px; border:none;"><h3>Congés / absences en cours</h3></div>
+  <div class="mini-list">${congesClinic.length?congesClinic.map(c=>`<div class="mini-row"><span><b>${c.staff}</b> — ${c.motif}</span>${statusTag(c.status)}</div>`).join(""):'<div class="cell-muted">Aucune absence en cours.</div>'}</div></div>`;
+  openModal("Service — "+s.service, s.clinic, body, `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`, true);
+}
+
+/* ================= CRUD CONFIGS ================= */
+CRUD.dme = {
+  title:"Dossier médical", prefix:"DM", titleField:"patient",
+  fields:[
+    {key:"patient", label:"Patient", required:true, strong:true},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"type", label:"Type", type:"select", options:["Compte-rendu","Prescription","Antécédents","Résultat labo","Imagerie"]},
+    {key:"praticien", label:"Praticien"},
+    {key:"controle", label:"Contrôle IA", type:"status", editable:false},
+  ],
+  defaults:()=>({controle:"Cohérent"}),
+  records:[
+    {id:"DM-88231", patient:"Mouna Ben Salah", clinique:"Les Oliviers", type:"Compte-rendu", praticien:"Dr. Belhassen", controle:"Cohérent"},
+    {id:"DM-88190", patient:"Karim Tlili", clinique:"Atlas", type:"Prescription", praticien:"Dr. Ferjani", controle:"Cohérent"},
+    {id:"DM-87991", patient:"Nadia Jendoubi", clinique:"Les Oliviers", type:"Imagerie", praticien:"Dr. Karray", controle:"Allergie non signalée"},
+  ],
+};
+function controlerCoherenceIA(){
+  const anomalies = CRUD.dme.records.filter(r=>r.controle!=="Cohérent");
+  CRUD.dme.records.forEach(r=>{ if(r.controle!=="Cohérent") r.controle = "Allergie non signalée"; });
+  renderCrud("dme");
+  toast(anomalies.length>0 ? "Agent Cohérence : "+anomalies.length+" incohérence(s) détectée(s) et signalée(s)." : "Agent Cohérence : aucune incohérence détectée sur les dossiers actifs.");
+}
+CRUD.hospitalisation = {
+  title:"Service d'hospitalisation", prefix:"HS", titleField:"service",
+  fields:[
+    {key:"service", label:"Service", required:true, strong:true},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"litsOccupes", label:"Lits occupés", placeholder:"Ex. 12/20"},
+    {key:"occupation", label:"Occupation", placeholder:"Ex. 60%"},
+    {key:"statut", label:"Statut", type:"status", editable:false},
+  ],
+  defaults:()=>({statut:"Normal"}),
+  records:[
+    {id:"SV-1", service:"Cardiologie", clinique:"Les Oliviers", litsOccupes:"28/30", occupation:"93%", statut:"Tension"},
+    {id:"SV-2", service:"Chirurgie viscérale", clinique:"Al Andalous", litsOccupes:"19/26", occupation:"73%", statut:"Normal"},
+    {id:"SV-3", service:"Maternité", clinique:"Ennasr", litsOccupes:"24/28", occupation:"86%", statut:"Surveillé"},
+  ],
+};
+function predireCapaciteIA(){
+  let tensions = 0;
+  CRUD.hospitalisation.records.forEach(r=>{
+    const pct = parseInt(r.occupation);
+    r.statut = pct>=90 ? "Tension" : pct>=80 ? "Surveillé" : "Normal";
+    if(r.statut==="Tension") tensions++;
+  });
+  renderCrud("hospitalisation");
+  toast(tensions>0 ? "Agent Capacité : risque de saturation détecté sur "+tensions+" service(s) sous 48h." : "Agent Capacité : aucune tension de capacité détectée.");
+}
+CRUD.labo = {
+  title:"Analyse laboratoire", prefix:"LB", titleField:"patient",
+  fields:[
+    {key:"patient", label:"Patient", required:true, strong:true},
+    {key:"analyse", label:"Analyse"},
+    {key:"technicien", label:"Technicien"},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"priorite", label:"Priorité", type:"select", options:["Normale","Urgente"]},
+    {key:"statut", label:"Statut", type:"status", editable:false},
+  ],
+  defaults:()=>({statut:"En cours"}),
+  records:[
+    {id:"LB-4471", patient:"Nadia Jendoubi", analyse:"NFS + CRP", technicien:"Walid Guesmi", clinique:"Les Oliviers", priorite:"Urgente", statut:"Critique"},
+    {id:"LB-4468", patient:"Karim Tlili", analyse:"Bilan hépatique", technicien:"Walid Guesmi", clinique:"Atlas", priorite:"Normale", statut:"En cours"},
+    {id:"LB-4459", patient:"Ahmed Riahi", analyse:"Ionogramme", technicien:"Technicien de garde", clinique:"Ennasr", priorite:"Urgente", statut:"Prélèvement"},
+  ],
+};
+function alerterBiologieIA(){
+  const critiques = CRUD.labo.records.filter(r=>r.statut==="Critique");
+  toast(critiques.length>0 ? "Agent Alerte biologique : "+critiques.length+" résultat(s) critique(s) notifié(s) au médecin traitant en moins de 90 secondes." : "Agent Alerte biologique : aucun résultat critique en attente.");
+}
+CRUD.imagerie = {
+  title:"Examen d'imagerie", prefix:"IMG", titleField:"patient",
+  fields:[
+    {key:"patient", label:"Patient", required:true, strong:true},
+    {key:"modalite", label:"Modalité", type:"select", options:["Radio","Scanner","IRM","Échographie"]},
+    {key:"radiologue", label:"Radiologue"},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"statut", label:"Statut", type:"status", editable:false},
+  ],
+  defaults:()=>({statut:"En cours"}),
+  records:[
+    {id:"IMG-2291", patient:"Hedi Mansour", modalite:"IRM lombaire", radiologue:"Dr. Karray", clinique:"Al Andalous", statut:"En cours"},
+    {id:"IMG-2288", patient:"Ines Gharbi", modalite:"Scanner thoracique", radiologue:"Dr. Bouzid", clinique:"Les Oliviers", statut:"Compte-rendu prêt"},
+  ],
+};
+function prioriserImagerieIA(){
+  const enCours = CRUD.imagerie.records.find(r=>r.statut==="En cours");
+  toast(enCours ? "Agent Pré-lecture : examen prioritaire détecté — "+enCours.patient+" ("+enCours.modalite+")." : "Agent Pré-lecture : aucun examen en attente de priorisation.");
+}
+CRUD.personnel = {
+  title:"Personnel médical", prefix:"ST", titleField:"name",
+  fields:[
+    {key:"name", label:"Nom", required:true, strong:true},
+    {key:"role", label:"Fonction"},
+    {key:"clinic", label:"Clinique", type:"select", options:CLINICS},
+    {key:"status", label:"Disponibilité", type:"select", options:["dispo","occupe","bloc","conge"]},
+    {key:"charge", label:"Charge du jour", placeholder:"Ex. 3/8"},
+    {key:"next", label:"Prochain créneau", placeholder:"Ex. Immédiat"},
+  ],
+  records: STAFF,
+  rowActionRender:(r)=> r.status==="conge" ? `<button class="btn btn-sm btn-ia" onclick="event.stopPropagation(); trouverRemplacantIA('${r.id}')">${icon("sparkle",12)}Remplaçant IA</button>` : "",
+};
+function trouverRemplacantIA(id){
+  const staff = STAFF_BY_ID[id];
+  const remplacant = STAFF.find(s=> s.id!==id && s.role===staff.role && s.status==="dispo");
+  toast(remplacant ? "Agent RH : "+remplacant.name+" ("+remplacant.clinic+") proposé en remplacement de "+staff.name+"." : "Agent RH : aucun remplaçant disponible trouvé pour "+staff.name+".");
+}
+CRUD.bloc = {
+  title:"Intervention bloc opératoire", prefix:"BLC", titleField:"intervention",
+  fields:[
+    {key:"salle", label:"Salle", placeholder:"Ex. Bloc A1"},
+    {key:"intervention", label:"Intervention", required:true, strong:true},
+    {key:"patient", label:"Patient"},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"chirurgien", label:"Chirurgien"},
+    {key:"anesthesiste", label:"Anesthésiste"},
+    {key:"infirmier", label:"Infirmier de bloc"},
+    {key:"statut", label:"Statut", type:"status", editable:false},
+  ],
+  defaults:()=>({statut:"Planifiée"}),
+  customAddExtra:()=>`<button class="btn btn-ia" style="margin-top:14px;" onclick="composerEquipeIA()">${icon("sparkle",14)}Composer l'équipe via l'agent IA</button><div class="ai-suggest-box" id="bloc-ai-box"></div>`,
+  records:[
+    {id:"BLC-1", salle:"Bloc A1", intervention:"Prothèse de hanche", patient:"Ahmed Riahi", clinique:"Al Andalous", chirurgien:"Dr. Yassine Trabelsi", anesthesiste:"Fares Jaziri", infirmier:"Rania Aouadi", statut:"En cours"},
+    {id:"BLC-2", salle:"Bloc B2", intervention:"Réduction fracture bras", patient:"Karim Tlili", clinique:"Atlas", chirurgien:"Dr. Ines Ferjani", anesthesiste:"Fares Jaziri", infirmier:"Rania Aouadi", statut:"Check-list en cours"},
+  ],
+};
+function composerEquipeIA(){
+  const chirurgien = STAFF.find(s=>/chirurgien|orthopéd|viscéral/i.test(s.role) && s.status==="dispo");
+  const anesth = STAFF.find(s=>/anesthésiste/i.test(s.role));
+  const infirmier = STAFF.find(s=>/infirmière responsable de bloc/i.test(s.role));
+  if(chirurgien) document.getElementById("add-bloc-chirurgien").value = chirurgien.name;
+  if(anesth) document.getElementById("add-bloc-anesthesiste").value = anesth.name;
+  if(infirmier) document.getElementById("add-bloc-infirmier").value = infirmier.name;
+  const box = document.getElementById("bloc-ai-box");
+  box.innerHTML = `<b>Équipe composée automatiquement :</b><ul>
+    <li>${chirurgien?chirurgien.name+" — disponible immédiatement":"Aucun chirurgien disponible trouvé"}</li>
+    <li>${anesth?anesth.name+" — anesthésiste, créneau "+anesth.next:"—"}</li>
+    <li>${infirmier?infirmier.name+" — infirmière responsable de bloc":"—"}</li>
+  </ul>`;
+  box.classList.add("show");
+}
+CRUD.facturation = {
+  title:"Facture patient", prefix:"FC", titleField:"patient",
+  fields:[
+    {key:"patient", label:"Patient", required:true, strong:true},
+    {key:"clinique", label:"Clinique", type:"select", options:CLINICS},
+    {key:"origine", label:"Origine (module)", placeholder:"Ex. Consultation + Labo"},
+    {key:"montant", label:"Montant", placeholder:"Ex. 620 DT"},
+    {key:"payeur", label:"Payeur", type:"select", options:["CNAM","Assurance privée","Patient direct"]},
+    {key:"statut", label:"Statut", type:"select", options:["Payée","En attente","Rejet à corriger"]},
+  ],
+  defaults:()=>({journalized:false}),
+  records:[
+    {id:"FC-91820", patient:"Mouna Ben Salah", clinique:"Les Oliviers", origine:"Consultation + Labo", montant:"1 240 DT", payeur:"CNAM", statut:"Payée", journalized:true},
+    {id:"FC-91818", patient:"Karim Tlili", clinique:"Atlas", origine:"Bloc opératoire", montant:"380 DT", payeur:"Assurance privée", statut:"En attente", journalized:false},
+    {id:"FC-91805", patient:"Sonia Haddad", clinique:"Ennasr", origine:"Consultation + Imagerie", montant:"620 DT", payeur:"CNAM", statut:"Rejet à corriger", journalized:false},
+  ],
+  renderExtra:(r)=>`<div class="detail-item" style="grid-column:1/-1;"><div class="dl">Journalisation</div><div class="dv">${r.journalized?statusTag("Journalisée"):statusTag("En attente")}</div></div>`
+};
+function detecterAnomaliesFacturationIA(){
+  const rejets = CRUD.facturation.records.filter(r=>r.statut==="Rejet à corriger");
+  toast(rejets.length>0 ? "Agent Facturation : "+rejets.length+" anomalie(s) de facturation détectée(s) et signalée(s) pour correction." : "Agent Facturation : aucune anomalie détectée sur les factures actives.");
+}
+
+/* ================= PHARMACIE ================= */
+const PHARMA_STOCK = [
+  {id:"PH-1", produit:"Amoxicilline 1g", stockLocal:38, seuil:50, dispensePour:"Patients Cardiologie", alerted:false},
+  {id:"PH-2", produit:"Antalgiques post-op", stockLocal:120, seuil:60, dispensePour:"Dr. Ferjani (bloc)", alerted:false},
+  {id:"PH-3", produit:"Insuline rapide", stockLocal:54, seuil:40, dispensePour:"Service Maternité", alerted:false},
+];
+function renderPharmacie(){
+  const tbody = PHARMA_STOCK.map(p=>{
+    const rupture = p.stockLocal < p.seuil;
+    const statut = rupture ? "Rupture proche" : "OK";
+    return `<tr>
+      <td><b class="cell-strong">${p.produit}</b></td><td>${p.stockLocal}</td><td class="cell-muted">${p.seuil}</td><td class="cell-muted">${p.dispensePour}</td>
+      <td>${statusTag(statut)}</td>
+      <td>${rupture ? (p.alerted ? '<span class="cell-muted">Alerte envoyée ✓</span>' : `<button class="btn btn-sm btn-ia" onclick="alerterPharmacie('${p.id}')">${icon("sparkle",12)}Alerte IA + commande</button>`) : ""}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("pharmacieTable").innerHTML = `<thead><tr><th>Produit</th><th>Stock local</th><th>Seuil critique</th><th>Dispensé pour</th><th>Statut</th><th></th></tr></thead><tbody>${tbody}</tbody>`;
+}
+function alerterPharmacie(id){
+  const p = PHARMA_STOCK.find(x=>x.id===id);
+  p.alerted = true;
+  renderPharmacie();
+  envoyerAlerteAchat(p.produit, p.stockLocal, p.seuil);
+}
+function openPharmaAdd(){
+  const body = `<div class="form-grid">
+    <div class="fg span2"><label>Produit *</label><input id="ph-produit" placeholder="Ex. Paracétamol inj."></div>
+    <div class="fg"><label>Stock local</label><input id="ph-stock" type="number" placeholder="Ex. 100"></div>
+    <div class="fg"><label>Seuil critique</label><input id="ph-seuil" type="number" placeholder="Ex. 40"></div>
+    <div class="fg span2"><label>Dispensé pour (service)</label><input id="ph-dispense" placeholder="Ex. Service Urgences"></div>
+  </div>`;
+  openModal("Ajouter un produit — stock local", "", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitPharmaAdd()">${icon("check",14)}Enregistrer</button>`);
+}
+function submitPharmaAdd(){
+  const produit = document.getElementById("ph-produit").value.trim();
+  if(!produit){ toast("Le nom du produit est obligatoire."); return; }
+  PHARMA_STOCK.unshift({id:nextId("PH"), produit, stockLocal:Number(document.getElementById("ph-stock").value||0), seuil:Number(document.getElementById("ph-seuil").value||0), dispensePour:document.getElementById("ph-dispense").value||"—", alerted:false});
+  renderPharmacie();
+  closeModal();
+  toast("Produit ajouté au stock local.");
+}
+
+/* ================= ORIENTATION IA ================= */
+const CASES = {
+  thorax:{ label:"Douleur thoracique aiguë", specialty:"Cardiologie",
+    candidates:["belhassen","zouari"], chosen:"belhassen",
+    reasoning:["Motif « douleur thoracique aiguë » → spécialité requise : Cardiologie.","2 cardiologues identifiés : Dr. Belhassen (Les Oliviers) et Dr. Zouari (Atlas).","Dr. Zouari est en bloc jusqu'à 14:00 → écartée.","Dr. Belhassen disponible immédiatement (charge 4/8) → affectation retenue."],
+    pipeline:[{n:"1",label:"Triage",staff:"Infirmier d'accueil + Agent IA"},{n:"2",label:"Consultation",staff:"Dr. Amine Belhassen"},{n:"3",label:"Laboratoire",staff:"Troponine — Technicien de garde"},{n:"4",label:"Imagerie",staff:"ECG — Dr. Emna Bouzid"},{n:"5",label:"Facturation",staff:"Agent Facturation"}]},
+  fracture:{ label:"Traumatisme — bras", specialty:"Orthopédie",
+    candidates:["ferjani","sfar"], chosen:"ferjani",
+    reasoning:["Motif « traumatisme du bras » → spécialité requise : Orthopédie.","Dr. Sfar est en congé → écarté.","Dr. Ferjani disponible (charge 3/7) → affectation retenue."],
+    pipeline:[{n:"1",label:"Triage",staff:"Infirmier d'accueil"},{n:"2",label:"Consultation",staff:"Dr. Ines Ferjani"},{n:"3",label:"Imagerie",staff:"Radio bras — Dr. Karray"},{n:"4",label:"Bloc (si besoin)",staff:"Dr. Ferjani + équipe"},{n:"5",label:"Facturation",staff:"Agent Facturation"}]},
+  grossesse:{ label:"Suivi grossesse", specialty:"Gynécologie-obstétrique",
+    candidates:["sassi","neji"], chosen:"sassi",
+    reasoning:["Motif « douleurs pelviennes, grossesse » → spécialité requise : Gynécologie.","Dr. Néji a un agenda complet (8/8) → écartée.","Dr. Sassi disponible (charge 2/10) → affectation retenue."],
+    pipeline:[{n:"1",label:"Triage",staff:"Infirmier d'accueil"},{n:"2",label:"Consultation",staff:"Dr. Sonia Sassi"},{n:"3",label:"Imagerie",staff:"Échographie — Dr. Karray"},{n:"4",label:"Facturation",staff:"Agent Facturation"}]},
+  abdo:{ label:"Douleur abdominale aiguë", specialty:"Urgences",
+    candidates:["chakroun","trabelsi"], chosen:"chakroun",
+    reasoning:["Motif « douleur abdominale aiguë » → prise en charge initiale par un urgentiste.","Dr. Trabelsi (chirurgien viscéral) est en bloc jusqu'à 15:30 → non mobilisable immédiatement.","Dr. Chakroun disponible immédiatement → affectation retenue."],
+    pipeline:[{n:"1",label:"Triage",staff:"Infirmier d'accueil"},{n:"2",label:"Consultation",staff:"Dr. Nabil Chakroun"},{n:"3",label:"Laboratoire",staff:"Bilan urgent — Walid Guesmi"},{n:"4",label:"Bloc (si confirmé)",staff:"Dr. Trabelsi notifié"},{n:"5",label:"Facturation",staff:"Agent Facturation"}]},
+};
+function renderOrientationResult(caseKey){
+  const c = CASES[caseKey];
+  const chosenStaff = STAFF_BY_ID[c.chosen];
+  const candHtml = c.candidates.map(id=>{
+    const s = STAFF_BY_ID[id]; const isChosen = id===c.chosen;
+    return `<div class="mini-row" style="${isChosen?'border:1.5px solid var(--teal-500); background:var(--teal-glow);':''}">
+      <span><b>${s.name}</b> — ${s.role} ${isChosen?'<span class="tag tag-green" style="margin-left:6px;">Retenu par l\\u2019IA</span>':''}</span>
+      <span class="staff-chip"><span class="staff-dot ${STATUS_DOT[s.status]}"></span>${STATUS_LABEL[s.status]}</span>
+    </div>`;
+  }).join("");
+  const stepsHtml = c.pipeline.map(p=>`<div class="mini-row"><span><b>${p.n}. ${p.label}</b></span><span class="cell-muted">${p.staff}</span></div>`).join("");
+  document.getElementById("orientResult").innerHTML = `
+    <div class="ai-suggest-box show"><b>Spécialité identifiée : ${c.specialty}</b> — patient orienté vers <b>${chosenStaff.name}</b>
+      <ul>${c.reasoning.map(r=>`<li>${r}</li>`).join("")}</ul></div>
+    <div style="margin-top:16px;"><div class="card-head" style="padding:0 0 10px; border:none;"><h3>Praticiens comparés</h3></div><div class="mini-list">${candHtml}</div></div>
+    <div style="margin-top:16px;"><div class="card-head" style="padding:0 0 10px; border:none;"><h3>Parcours généré</h3></div><div class="mini-list">${stepsHtml}</div></div>
+    <div style="margin-top:18px; display:flex; gap:10px;">
+      <button class="btn btn-primary" onclick="toast('Patient orienté vers ${chosenStaff.name} — dossier créé.')">${icon("user",14)}Confirmer l'orientation</button>
+      <button class="btn btn-ghost" onclick="go('personnel')">Voir le personnel</button>
+    </div>`;
+}
+
+/* ================= AGENTS IA ================= */
+const AGENTS = [
+  {name:"Agent Orientation patient", desc:"Analyse le motif du patient et affecte le médecin disponible le plus pertinent.", metricLabel:"Orientations/jour", metricVal:"42", foot:"Espace Clinique", on:true},
+  {name:"Agent Comptable", desc:"Génère les écritures comptables à partir des factures clôturées, clinique par clinique.", metricLabel:"Écritures générées/mois", metricVal:"312", foot:"Espace Holding · Portefeuille cliniques", on:true},
+  {name:"Agent Réappro. groupe", desc:"Reçoit les alertes de rupture des pharmacies locales et prépare la commande, à confirmer par le responsable.", metricLabel:"Ruptures évitées/mois", metricVal:"9", foot:"Espace Holding · Achats", on:true},
+  {name:"Agent Prédiction capacité", desc:"Anticipe la saturation des services et des lits à 24-72h.", metricLabel:"Précision prédictive", metricVal:"84%", foot:"Espace Clinique", on:true},
+  {name:"Agent Facturation", desc:"Génère automatiquement les factures depuis les actes réalisés.", metricLabel:"Factures auto/mois", metricVal:"1 640", foot:"Espace Clinique", on:true},
+  {name:"Agent Reporting automatique", desc:"Génère et distribue les rapports décisionnels.", metricLabel:"Rapports générés/mois", metricVal:"214", foot:"Espace Holding", on:true},
+];
+
+/* ================= NOTIFICATIONS ================= */
+const NOTIFICATIONS = [
+  {id:"N1", type:"red", icon:"x", title:"Stock critique", desc:"Paracétamol 500mg sous le seuil minimum (32 unités)", time:"il y a 5 min", unread:true},
+  {id:"N2", type:"amber", icon:"warn", title:"Scanner en maintenance", desc:"Le scanner sera indisponible jusqu'à 16h00", time:"il y a 22 min", unread:true},
+  {id:"N3", type:"blue", icon:"info", title:"Nouvelle admission", desc:"Patient admis aux urgences — box 3", time:"il y a 38 min", unread:true},
+  {id:"N4", type:"red", icon:"x", title:"Résultat critique", desc:"Résultat laboratoire critique — Dr Amrani notifié", time:"il y a 1h", unread:false},
+  {id:"N5", type:"green", icon:"check", title:"Facture réglée", desc:"Facture FC-91820 encaissée (1 240 DT)", time:"il y a 2h", unread:false},
+];
+const NOTIF_ICONS = {
+  x:'<circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/>',
+  warn:'<path d="M12 9v4M12 17h.01M10.3 3.9L2.6 18a2 2 0 001.7 3h15.4a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
+};
+function notifIcon(name){ return `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">${NOTIF_ICONS[name]}</svg>`; }
+function updateBellDot(){
+  const anyUnread = NOTIFICATIONS.some(n=>n.unread);
+  const count = NOTIFICATIONS.filter(n=>n.unread).length;
+  document.getElementById("bellDot").style.display = anyUnread ? "block" : "none";
+  const navBadge = document.getElementById("notifNavBadge");
+  if(navBadge){ navBadge.style.display = anyUnread ? "inline-block" : "none"; navBadge.textContent = count; }
+}
+function renderNotifications(){
+  const list = document.getElementById("notifList");
+  if(!list) return;
+  list.innerHTML = NOTIFICATIONS.map(n=>`
+    <div class="notif-card ${n.unread?"unread":""}">
+      <div class="notif-icon ${n.type}">${notifIcon(n.icon)}</div>
+      <div style="flex:1;">
+        <div class="notif-title-row"><span class="notif-title">${n.title}</span>${n.unread?'<span class="notif-unread-dot"></span>':""}</div>
+        <div class="notif-desc">${n.desc}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>`).join("");
+  updateBellDot();
+}
+function markAllNotificationsRead(){
+  NOTIFICATIONS.forEach(n=> n.unread = false);
+  renderNotifications();
+  toast("Toutes les notifications ont été marquées comme lues.");
+}
+
+/* ================= ADMINISTRATION ================= */
+const ADMIN_USERS = [
+  {id:"U1", name:"Omar Bouras", role:"Technicien radiologie", service:"Radiologie", status:"Congé"},
+  {id:"U2", name:"Ismail Bennani", role:"Infirmier(e)", service:"Bloc opératoire", status:"Actif"},
+  {id:"U3", name:"Saida Haddad", role:"Agent d'accueil", service:"Accueil", status:"Actif"},
+  {id:"U4", name:"Aicha El Amrani", role:"Brancardier", service:"Logistique", status:"Actif"},
+  {id:"U5", name:"Yassine Belkadi", role:"Agent maintenance", service:"Maintenance", status:"Actif"},
+  {id:"U6", name:"Dr. Amine Belhassen", role:"Directeur médical", service:"Cardiologie · Les Oliviers", status:"Actif"},
+  {id:"U7", name:"Dorra Kammoun", role:"Pharmacienne", service:"Pharmacie · Les Oliviers", status:"Actif"},
+  {id:"U8", name:"Sami Belhaj", role:"Administrateur", service:"Direction Holding", status:"Actif"},
+];
+const ADMIN_ROLES = [
+  ["Administrateur", "Accès complet — configuration, utilisateurs, intégrations"],
+  ["Directeur médical", "Vision clinique complète + validation des protocoles"],
+  ["Médecin", "Consultations, DME, prescriptions, bloc opératoire"],
+  ["Infirmier(e)", "Soins, dispensation, suivi hospitalisation"],
+  ["Technicien laboratoire", "Saisie et validation des résultats d'analyses"],
+  ["Technicien radiologie", "Réalisation et compte-rendu des examens d'imagerie"],
+  ["Agent d'accueil", "Admission, prise de rendez-vous, orientation"],
+  ["Brancardier", "Mouvements et transferts patients"],
+  ["Agent maintenance", "Interventions techniques, équipements"],
+];
+const ADMIN_LOG = [
+  {who:"Sami Belhaj", action:"a modifié les droits de Dr. Ines Ferjani", time:"il y a 2h"},
+  {who:"Sami Belhaj", action:"a créé le compte Yassine Belkadi (Agent maintenance)", time:"il y a 1j"},
+  {who:"Agent Comptable", action:"a généré 6 écritures depuis le module Facturation", time:"il y a 1j"},
+  {who:"Sami Belhaj", action:"a désactivé l'intégration PACS Imagerie (FHIR)", time:"il y a 3j"},
+  {who:"Système", action:"sauvegarde automatique quotidienne effectuée", time:"il y a 3j"},
+];
+const ADMIN_INTEGRATIONS = [
+  {name:"Sage (comptabilité)", desc:"Export des écritures comptables", on:true},
+  {name:"CNAM (tiers payant)", desc:"Vérification des droits et télétransmission", on:true},
+  {name:"Laboratoire externe (HL7)", desc:"Réception des résultats d'analyses", on:true},
+  {name:"PACS Imagerie (FHIR)", desc:"Interopérabilité des examens d'imagerie", on:false},
+];
+let adminTab = "utilisateurs";
+function setAdminTab(t){ adminTab = t; renderAdministration(); }
+function renderAdministration(){
+  const root = document.getElementById("adminRoot");
+  if(!root) return;
+  const activesCount = ADMIN_INTEGRATIONS.filter(i=>i.on).length;
+  const tabsHtml = `<div class="tabs">
+    <div class="tab-btn ${adminTab==="utilisateurs"?"active":""}" onclick="setAdminTab('utilisateurs')">Utilisateurs</div>
+    <div class="tab-btn ${adminTab==="permissions"?"active":""}" onclick="setAdminTab('permissions')">Permissions</div>
+    <div class="tab-btn ${adminTab==="journal"?"active":""}" onclick="setAdminTab('journal')">Journal</div>
+    <div class="tab-btn ${adminTab==="integrations"?"active":""}" onclick="setAdminTab('integrations')">API · HL7 · FHIR</div>
+  </div>`;
+  let body = "";
+  if(adminTab==="utilisateurs"){
+    const rows = ADMIN_USERS.map(u=>`<tr><td><span class="avatar-sm">${initials(u.name)}</span><b class="cell-strong">${u.name}</b></td><td><span class="tag tag-grey">${u.role}</span></td><td class="cell-muted">${u.service}</td><td>${statusTag(u.status)}</td></tr>`).join("");
+    body = `<div class="card"><div class="card-body" style="padding:0;"><table><thead><tr><th>Utilisateur</th><th>Rôle</th><th>Service</th><th>Statut</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  } else if(adminTab==="permissions"){
+    const rows = ADMIN_ROLES.map(([role,desc])=>`<div class="mini-row"><span><b>${role}</b></span><span class="cell-muted">${desc}</span></div>`).join("");
+    body = `<div class="card"><div class="card-body"><div class="mini-list">${rows}</div></div></div>`;
+  } else if(adminTab==="journal"){
+    const rows = ADMIN_LOG.map(l=>`<div class="tl-item"><div class="tl-dot" style="background:var(--teal-400);"></div><div class="tl-body"><b>${l.who}</b> ${l.action}<div class="tl-time">${l.time}</div></div></div>`).join("");
+    body = `<div class="card"><div class="card-body"><div class="timeline">${rows}</div></div></div>`;
+  } else {
+    const rows = ADMIN_INTEGRATIONS.map((it,idx)=>`<div class="mini-row"><span><b>${it.name}</b><div class="cell-muted" style="margin-top:2px;">${it.desc}</div></span><div class="switch ${it.on?"on":""}" onclick="toggleIntegration(${idx})"></div></div>`).join("");
+    body = `<div class="card"><div class="card-body"><div class="mini-list">${rows}</div></div></div>`;
+  }
+  root.innerHTML = `
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("users",15)}</div></div><div class="kpi-value">${ADMIN_USERS.length + 148}</div><div class="kpi-label">Utilisateurs</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("sparkle",15)}</div></div><div class="kpi-value">${ADMIN_ROLES.length}</div><div class="kpi-label">Rôles définis</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("check",15)}</div></div><div class="kpi-value">10:00</div><div class="kpi-label">Dernière sauvegarde — automatique · quotidienne</div></div>
+      <div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:rgba(245,165,36,.12); color:var(--amber-500);">${icon("building",15)}</div></div><div class="kpi-value">${activesCount} / ${ADMIN_INTEGRATIONS.length}</div><div class="kpi-label">Intégrations actives</div></div>
+    </div>
+    ${tabsHtml}
+    ${body}`;
+}
+function toggleIntegration(idx){
+  ADMIN_INTEGRATIONS[idx].on = !ADMIN_INTEGRATIONS[idx].on;
+  renderAdministration();
+  toast((ADMIN_INTEGRATIONS[idx].on?"Intégration activée : ":"Intégration désactivée : ")+ADMIN_INTEGRATIONS[idx].name);
+}
+function openAdminUserAdd(){
+  const body = `<div class="form-grid">
+    <div class="fg span2"><label>Nom complet *</label><input id="au-name" placeholder="Ex. Nadia Chraibi"></div>
+    <div class="fg"><label>Rôle</label><select id="au-role">${ADMIN_ROLES.map(r=>`<option>${r[0]}</option>`).join("")}</select></div>
+    <div class="fg"><label>Service</label><input id="au-service" placeholder="Ex. Accueil"></div>
+  </div>`;
+  openModal("Ajouter un utilisateur", "", body, `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button class="btn btn-primary" onclick="submitAdminUserAdd()">${icon("check",14)}Créer le compte</button>`);
+}
+function submitAdminUserAdd(){
+  const name = document.getElementById("au-name").value.trim();
+  if(!name){ toast("Le nom est obligatoire."); return; }
+  ADMIN_USERS.unshift({id: nextId("U"), name, role: document.getElementById("au-role").value, service: document.getElementById("au-service").value||"—", status:"Actif"});
+  renderAdministration();
+  closeModal();
+  toast("Utilisateur "+name+" créé.");
+}
+
+/* ================= PARAMÈTRES ================= */
+let appearanceMode = "clair";
+function setAppearance(mode){
+  appearanceMode = mode;
+  document.body.classList.toggle("dark-mode", mode==="sombre");
+  document.getElementById("modeClairBtn").classList.toggle("active", mode==="clair");
+  document.getElementById("modeSombreBtn").classList.toggle("active", mode==="sombre");
+}
+function saveSettings(){ toast("Paramètres enregistrés avec succès."); }
+
+function renderDashboardExtras(){
+  const el = document.getElementById("dashExtras");
+  if(!el) return;
+  el.innerHTML = `
+        <div class="alert-strip">
+          <div class="alert-pill al-blue"><div class="alert-icon al-blue">${icon("scissors",15)}</div><div class="alert-text">2 salles opératoires disponibles cet après-midi</div></div>
+          <div class="alert-pill al-amber"><div class="alert-icon al-amber">${icon("users",15)}</div><div class="alert-text">5 patients en attente aux urgences</div></div>
+          <div class="alert-pill al-red"><div class="alert-icon al-red">${icon("alert",15)}</div><div class="alert-text">Stock critique : Paracétamol 500mg (32 unités)</div></div>
+          <div class="alert-pill al-amber"><div class="alert-icon al-amber">${icon("scan",15)}</div><div class="alert-text">IRM 1.5T en maintenance jusqu'à 16h00</div></div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Patients<br>aujourd'hui</span><div class="stat-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("users",13)}</div></div><div class="stat-value">142</div><div class="stat-trend up">↗ +8% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Consultations</span><div class="stat-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("pulse",13)}</div></div><div class="stat-value">87</div><div class="stat-trend up">↗ +5% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Hospitalisations</span><div class="stat-icon" style="background:rgba(47,111,228,.12); color:var(--indigo-500);">${icon("bed",13)}</div></div><div class="stat-value">152</div><div class="stat-trend down">↘ -3% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Urgences</span><div class="stat-icon" style="background:rgba(240,80,110,.12); color:var(--red-500);">${icon("cross",13)}</div></div><div class="stat-value">23</div><div class="stat-trend up">↗ +14% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Bloc<br>opératoire</span><div class="stat-icon" style="background:rgba(245,165,36,.14); color:var(--amber-500);">${icon("scissors",13)}</div></div><div class="stat-value">37</div><div class="stat-sub">interventions en cours</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Radiologie</span><div class="stat-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("scan",13)}</div></div><div class="stat-value">258</div><div class="stat-sub">examens en attente</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Laboratoire</span><div class="stat-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("flask",13)}</div></div><div class="stat-value">1197</div><div class="stat-sub">analyses à valider</div></div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">CA du jour</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">486 500 <span style="font-size:12px; font-weight:600;">DT</span></div><div class="stat-trend up">↗ +12% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Encaissements</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("wallet",13)}</div></div><div class="stat-value">412 300 <span style="font-size:12px; font-weight:600;">DT</span></div><div class="stat-trend up">↗ +9% vs mois dernier</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Factures<br>émises</span><div class="stat-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("receipt",13)}</div></div><div class="stat-value">21</div><div class="stat-sub">aujourd'hui</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Occupation<br>des lits</span><div class="stat-icon" style="background:var(--teal-glow); color:var(--teal-500);">${icon("pulse",13)}</div></div><div class="stat-value">78%</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Médecins<br>présents</span><div class="stat-icon" style="background:rgba(47,193,126,.12); color:var(--green-500);">${icon("user",13)}</div></div><div class="stat-value">34</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Personnel<br>connecté</span><div class="stat-icon" style="background:var(--indigo-glow); color:var(--indigo-500);">${icon("wifi",13)}</div></div><div class="stat-value">96</div></div>
+          <div class="stat-card"><div class="stat-top"><span class="stat-label">Alertes<br>critiques</span><div class="stat-icon" style="background:rgba(240,80,110,.12); color:var(--red-500);">${icon("alert",13)}</div></div><div class="stat-value">2</div></div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>Admissions &amp; urgences</h3>
+            <div class="chart-sub">7 derniers jours</div>
+            <div class="line-chart-wrap">
+              <svg viewBox="0 0 700 260" width="100%" style="min-width:520px;">
+                <defs><linearGradient id="admFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#14B8A6" stop-opacity=".22"/><stop offset="100%" stop-color="#14B8A6" stop-opacity="0"/></linearGradient></defs>
+                <g stroke="#EDF4F2" stroke-width="1">
+                  <line x1="40" y1="20" x2="660" y2="20"/><line x1="40" y1="70" x2="660" y2="70"/><line x1="40" y1="120" x2="660" y2="120"/><line x1="40" y1="170" x2="660" y2="170"/><line x1="40" y1="220" x2="660" y2="220"/>
+                </g>
+                <g fill="#94A9A4" font-size="11" font-family="Inter">
+                  <text x="10" y="24">60</text><text x="10" y="74">45</text><text x="10" y="124">30</text><text x="10" y="174">15</text><text x="14" y="224">0</text>
+                  <text x="40" y="242" text-anchor="middle">Lun</text><text x="143" y="242" text-anchor="middle">Mar</text><text x="247" y="242" text-anchor="middle">Mer</text><text x="350" y="242" text-anchor="middle">Jeu</text><text x="453" y="242" text-anchor="middle">Ven</text><text x="557" y="242" text-anchor="middle">Sam</text><text x="660" y="242" text-anchor="middle">Dim</text>
+                </g>
+                <path d="M40,126.7 L143,80 L247,146.7 L350,20 L453,86.7 L557,133.3 L660,63.3 L660,220 L40,220 Z" fill="url(#admFill)"/>
+                <polyline points="40,126.7 143,80 247,146.7 350,20 453,86.7 557,133.3 660,63.3" fill="none" stroke="#14B8A6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="40,180 143,163.3 247,153.3 350,146.7 453,140 557,136.7 660,133.3" fill="none" stroke="#F0506E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="chart-legend-row">
+              <div class="chart-legend-item"><span class="chart-legend-line" style="background:var(--teal-500);"></span>Admissions</div>
+              <div class="chart-legend-item"><span class="chart-legend-line" style="background:var(--red-500);"></span>Urgences</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>Top spécialités</h3>
+            <div class="chart-sub">Consultations ce mois</div>
+            <div class="donut-wrap">
+              <div class="donut" style="background:conic-gradient(#14B8A6 0% 22%, #2FC17E 22% 40%, #F5A524 40% 55%, #2F6FE4 55% 75%, #F0506E 75% 85%, #6FA0F5 85% 100%);"></div>
+              <div class="donut-legend">
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#14B8A6;"></span>Cardiologie</div>
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#2FC17E;"></span>Orthopédie</div>
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#F5A524;"></span>ORL</div>
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#2F6FE4;"></span>Gynécologie</div>
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#F0506E;"></span>Pédiatrie</div>
+                <div class="donut-legend-item"><span class="donut-dot" style="background:#6FA0F5;"></span>Urgences</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>Chiffre d'affaires mensuel</h3>
+            <div class="chart-sub">CA &amp; marge (DT)</div>
+            <div class="bar-chart">
+              <div class="bar-col"><span class="bar-val">980K</span><div class="bar-fill" style="height:49%"></div><span class="bar-label">Sep</span></div>
+              <div class="bar-col"><span class="bar-val">1140K</span><div class="bar-fill" style="height:57%"></div><span class="bar-label">Oct</span></div>
+              <div class="bar-col"><span class="bar-val">880K</span><div class="bar-fill" style="height:44%"></div><span class="bar-label">Nov</span></div>
+              <div class="bar-col"><span class="bar-val">720K</span><div class="bar-fill" style="height:36%"></div><span class="bar-label">Déc</span></div>
+              <div class="bar-col"><span class="bar-val">1980K</span><div class="bar-fill" style="height:99%"></div><span class="bar-label">Jan</span></div>
+              <div class="bar-col"><span class="bar-val">1920K</span><div class="bar-fill" style="height:96%"></div><span class="bar-label">Fév</span></div>
+              <div class="bar-col"><span class="bar-val">1780K</span><div class="bar-fill" style="height:89%"></div><span class="bar-label">Mar</span></div>
+              <div class="bar-col"><span class="bar-val">1650K</span><div class="bar-fill" style="height:83%"></div><span class="bar-label">Avr</span></div>
+              <div class="bar-col"><span class="bar-val">1500K</span><div class="bar-fill" style="height:75%"></div><span class="bar-label">Mai</span></div>
+              <div class="bar-col"><span class="bar-val">1160K</span><div class="bar-fill" style="height:58%"></div><span class="bar-label">Juin</span></div>
+              <div class="bar-col"><span class="bar-val">620K</span><div class="bar-fill" style="height:31%"></div><span class="bar-label">Juil</span></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>Temps moyen d'attente</h3>
+            <div class="chart-sub">Aujourd'hui (min)</div>
+            <div class="line-chart-wrap">
+              <svg viewBox="0 0 500 220" width="100%" style="min-width:340px;">
+                <g stroke="#EDF4F2" stroke-width="1">
+                  <line x1="30" y1="20" x2="470" y2="20"/><line x1="30" y1="57.5" x2="470" y2="57.5"/><line x1="30" y1="95" x2="470" y2="95"/><line x1="30" y1="132.5" x2="470" y2="132.5"/><line x1="30" y1="170" x2="470" y2="170"/>
+                </g>
+                <g fill="#94A9A4" font-size="11" font-family="Inter">
+                  <text x="0" y="24">60</text><text x="0" y="61.5">45</text><text x="0" y="99">30</text><text x="0" y="136.5">15</text><text x="4" y="174">0</text>
+                  <text x="30" y="196" text-anchor="middle">08h</text><text x="118" y="196" text-anchor="middle">10h</text><text x="206" y="196" text-anchor="middle">12h</text><text x="294" y="196" text-anchor="middle">14h</text><text x="382" y="196" text-anchor="middle">16h</text><text x="470" y="196" text-anchor="middle">18h</text>
+                </g>
+                <polyline points="30,115 118,82.5 206,50 294,95 382,65 470,107.5" fill="none" stroke="#F5A524" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <g fill="#F5A524" stroke="#fff" stroke-width="2">
+                  <circle cx="30" cy="115" r="4"/><circle cx="118" cy="82.5" r="4"/><circle cx="206" cy="50" r="4"/><circle cx="294" cy="95" r="4"/><circle cx="382" cy="65" r="4"/><circle cx="470" cy="107.5" r="4"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+`;
+}
+
+/* ================= PAGE ASSEMBLY ================= */
+const gp = document.getElementById("genericPages");
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-orientation">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique · Agent IA</div><h1 class="page-title">Orientation intelligente du patient</h1>
+  <p class="page-desc">Le patient décrit son motif. L'agent compare les médecins compatibles et leur disponibilité réelle, explique son raisonnement, puis prépare le parcours jusqu'à la facturation.</p></div></div>
+  <div class="card"><div class="card-body">
+    <div class="form-grid">
+      <div class="fg span2"><label>Motif de consultation du patient</label>
+        <select id="motifSelect"><option value="">— Sélectionner un motif —</option>
+          <option value="thorax">Douleur thoracique aiguë</option>
+          <option value="fracture">Traumatisme / suspicion de fracture du bras</option>
+          <option value="grossesse">Suivi de grossesse — douleurs pelviennes</option>
+          <option value="abdo">Douleur abdominale aiguë</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-ia" style="margin-top:14px;" onclick="runOrientation()">${icon("sparkle",14)}Lancer l'orientation IA</button>
+    <div id="orientResult" style="margin-top:6px;"></div>
+  </div></div>
+</section>`);
+function runOrientation(){
+  const val = document.getElementById("motifSelect").value;
+  if(!val){ toast("Veuillez sélectionner un motif."); return; }
+  renderOrientationResult(val);
+}
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-patients">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Patients &amp; admissions</h1>
+  <p class="page-desc">Cliquez un patient pour ouvrir sa fiche complète (identité, consultations, examens, factures).</p></div>
+  <button class="btn btn-primary" onclick="openPatientAdd()">${icon("plus",14)}Ajouter un patient</button></div>
+  <div class="card"><div class="card-head"><h3>Liste des patients</h3><span class="muted" id="patientsCount"></span></div>
+  <div class="card-body" style="padding:0;"><table id="patientsTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-rdv">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Rendez-vous &amp; calendrier de disponibilités</h1>
+  <p class="page-desc">Vue temps réel des créneaux par médecin. Cliquez un créneau libre pour réserver, ou laissez l'agent IA suggérer le meilleur praticien selon le motif.</p></div>
+  <button class="btn btn-ghost" onclick="openCongeForm()">${icon("calendar",14)}Demande de congé / absence</button></div>
+  <div class="card" style="margin-bottom:16px;"><div class="card-body">
+    <div class="day-tabs">
+      <div class="day-tab active" data-day="today" onclick="setDay('today')">Aujourd'hui</div>
+      <div class="day-tab" data-day="tomorrow" onclick="setDay('tomorrow')">Demain</div>
+    </div>
+    <div class="cal-wrap"><div class="cal-grid" id="calGrid"></div></div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(47,193,126,.5);"></span>Libre</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(245,165,36,.5);"></span>Occupé</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--indigo-glow);"></span>En bloc</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--border-soft);"></span>Congé</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--navy-900);"></span>RDV pris</div>
+    </div>
+  </div></div>
+  <div class="card"><div class="card-head"><h3>Demandes de congé &amp; absences</h3></div><div class="card-body" style="padding:0;"><table id="congesTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-dme">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Dossier médical électronique (DME)</h1><p class="page-desc">Dossier patient longitudinal, contrôlé automatiquement par l'agent Cohérence.</p></div>
+  <div style="display:flex; gap:8px;"><button class="btn btn-ia" onclick="controlerCoherenceIA()">${icon("sparkle",14)}Contrôler la cohérence (Agent IA)</button><button class="btn btn-primary" onclick="openCrudAdd('dme')">${icon("plus",14)}Ajouter un dossier</button></div></div>
+  <div class="card"><div class="card-head"><h3>Dossiers</h3><span class="muted" id="crud-count-dme"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-dme"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-hospitalisation">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Hospitalisation &amp; gestion des lits</h1><p class="page-desc">Cartographie des lits par service et par clinique.</p></div>
+  <div style="display:flex; gap:8px;"><button class="btn btn-ia" onclick="predireCapaciteIA()">${icon("sparkle",14)}Prédire les tensions (Agent IA)</button><button class="btn btn-primary" onclick="openCrudAdd('hospitalisation')">${icon("plus",14)}Ajouter un service</button></div></div>
+  <div class="card"><div class="card-head"><h3>Services</h3><span class="muted" id="crud-count-hospitalisation"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-hospitalisation"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-labo">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Laboratoire &amp; analyses</h1><p class="page-desc">Suivi des analyses en cours et validation biologique.</p></div>
+  <div style="display:flex; gap:8px;"><button class="btn btn-ia" onclick="alerterBiologieIA()">${icon("sparkle",14)}Contrôle biologique (Agent IA)</button><button class="btn btn-primary" onclick="openCrudAdd('labo')">${icon("plus",14)}Ajouter une analyse</button></div></div>
+  <div class="card"><div class="card-head"><h3>Analyses</h3><span class="muted" id="crud-count-labo"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-labo"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-imagerie">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Imagerie médicale</h1><p class="page-desc">Examens RIS/PACS et comptes-rendus.</p></div>
+  <div style="display:flex; gap:8px;"><button class="btn btn-ia" onclick="prioriserImagerieIA()">${icon("sparkle",14)}Prioriser via l'Agent IA</button><button class="btn btn-primary" onclick="openCrudAdd('imagerie')">${icon("plus",14)}Ajouter un examen</button></div></div>
+  <div class="card"><div class="card-head"><h3>Examens</h3><span class="muted" id="crud-count-imagerie"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-imagerie"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-pharmacie">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Pharmacie &amp; stock local</h1><p class="page-desc">Dès qu'un produit passe sous le seuil critique, l'agent IA alerte et prépare la commande auprès de l'Espace Holding — le responsable n'a plus qu'à confirmer.</p></div>
+  <button class="btn btn-primary" onclick="openPharmaAdd()">${icon("plus",14)}Ajouter un produit</button></div>
+  <div class="card"><div class="card-head"><h3>Stock local</h3></div><div class="card-body" style="padding:0;"><table id="pharmacieTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-bloc">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Bloc opératoire</h1><p class="page-desc">Programmation et composition d'équipe (chirurgien, anesthésiste, infirmier de bloc) — assistée par l'agent IA.</p></div>
+  <button class="btn btn-primary" onclick="openCrudAdd('bloc')">${icon("plus",14)}Programmer une intervention</button></div>
+  <div class="card"><div class="card-head"><h3>Interventions</h3><span class="muted" id="crud-count-bloc"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-bloc"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-facturation">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Facturation patient</h1><p class="page-desc">Chaque facture clôturée est transmise à l'Agent Comptable pour générer automatiquement les écritures (voir Portefeuille cliniques, Espace Holding).</p></div>
+  <div style="display:flex; gap:8px;"><button class="btn btn-ia" onclick="detecterAnomaliesFacturationIA()">${icon("sparkle",14)}Détecter les anomalies (Agent IA)</button><button class="btn btn-primary" onclick="openCrudAdd('facturation')">${icon("plus",14)}Créer une facture</button></div></div>
+  <div class="card"><div class="card-head"><h3>Factures</h3><span class="muted" id="crud-count-facturation"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-facturation"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-personnel">
+  <div class="page-head"><div><div class="page-eyebrow">Espace Clinique</div><h1 class="page-title">Personnel &amp; disponibilités</h1><p class="page-desc">Registre utilisé en temps réel par l'agent d'orientation et la programmation du bloc.</p></div>
+  <button class="btn btn-primary" onclick="openCrudAdd('personnel')">${icon("plus",14)}Ajouter un membre</button></div>
+  <div class="card"><div class="card-head"><h3>Personnel — 4 cliniques</h3><span class="muted" id="crud-count-personnel"></span></div><div class="card-body" style="padding:0;"><table id="crud-table-personnel"></table></div></div>
+</section>`);
+
+/* ---- HOLDING PAGES ---- */
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-portefeuille">
+  <div id="pfRoot"></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-stocks">
+  <div class="page-head"><div><div class="page-eyebrow holding">Espace Holding</div><h1 class="page-title">Achats &amp; stocks groupe</h1><p class="page-desc">Les alertes de rupture remontées par les pharmacies locales génèrent automatiquement un bon de commande brouillon. Cliquez une commande pour le détail ; le responsable n'a qu'à confirmer.</p></div></div>
+  <div class="card"><div class="card-head"><h3>Commandes</h3></div><div class="card-body" style="padding:0;"><table id="achatsTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-rh">
+  <div class="page-head"><div><div class="page-eyebrow holding">Espace Holding</div><h1 class="page-title">RH Groupe</h1><p class="page-desc">Cliquez un service pour voir son détail : personnel affecté et absences en cours.</p></div>
+  <button class="btn btn-ia" onclick="optimiserRHIA()">${icon("sparkle",14)}Optimiser les plannings (Agent IA)</button></div>
+  <div class="card"><div class="card-head"><h3>Effectifs par service</h3></div><div class="card-body" style="padding:0;"><table id="rhTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-reporting">
+  <div class="page-head"><div><div class="page-eyebrow holding">Espace Holding</div><h1 class="page-title">Reporting &amp; BI</h1><p class="page-desc">Rapports générés automatiquement par l'Agent Reporting.</p></div>
+  <button class="btn btn-ia" onclick="genererRapportIA()">${icon("sparkle",14)}Générer un rapport (Agent IA)</button></div>
+  <div class="card"><div class="card-head"><h3>Rapports disponibles</h3></div><div class="card-body" style="padding:0;"><table id="reportingTable"></table></div></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-ia">
+  <div class="page-head"><div><div class="page-eyebrow holding">Espace Holding</div><h1 class="page-title">Centre des agents IA</h1><p class="page-desc">Chaque agent journalise ses actions pour une traçabilité totale.</p></div></div>
+  <div class="agent-grid" id="agentGrid"></div>
+</section>`);
+const agentGrid = document.getElementById("agentGrid");
+AGENTS.forEach(a=>{
+  agentGrid.insertAdjacentHTML("beforeend", `<div class="agent-card">
+    <div class="agent-top"><div class="agent-icon">${icon("sparkle",18)}</div><div class="switch ${a.on?"on":""}" onclick="this.classList.toggle('on')"></div></div>
+    <div><div class="agent-name">${a.name}</div><div class="agent-desc">${a.desc}</div></div>
+    <div class="agent-metric"><span>${a.metricLabel}</span><b>${a.metricVal}</b></div>
+    <div class="agent-foot">${a.foot}</div></div>`);
+});
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-notifications">
+  <div class="page-head">
+    <div><div class="page-eyebrow">Système</div><h1 class="page-title">Centre de notifications</h1><p class="page-desc">Alertes et événements en temps réel, remontés par les agents IA et les modules de la plateforme.</p></div>
+    <button class="btn btn-ghost" onclick="markAllNotificationsRead()">${icon("check",14)}Tout marquer comme lu</button>
+  </div>
+  <div id="notifList"></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-administration">
+  <div class="page-head">
+    <div><div class="page-eyebrow">Système</div><h1 class="page-title">Administration</h1><p class="page-desc">Utilisateurs, permissions, journal d'activité et intégrations de la plateforme.</p></div>
+    <button class="btn btn-primary" onclick="openAdminUserAdd()">${icon("plus",14)}Utilisateur</button>
+  </div>
+  <div id="adminRoot"></div>
+</section>`);
+
+gp.insertAdjacentHTML("beforeend", `
+<section class="page" id="page-parametres">
+  <div class="page-head"><div><div class="page-eyebrow">Système</div><h1 class="page-title">Paramètres</h1><p class="page-desc">Configuration de la plateforme.</p></div></div>
+
+  <div class="settings-card">
+    <h3>${icon("sparkle",17)}Apparence</h3>
+    <div class="mode-select">
+      <div class="mode-btn active" id="modeClairBtn" onclick="setAppearance('clair')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Mode clair</div>
+      <div class="mode-btn" id="modeSombreBtn" onclick="setAppearance('sombre')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8.5 8.5 0 1110 3.5a7 7 0 0010 11z"/></svg>Mode sombre</div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <h3>${icon("building",17)}Établissement</h3>
+    <div class="form-grid">
+      <div class="fg"><label>Nom</label><input id="set-nom" value="Holding Assalam"></div>
+      <div class="fg"><label>Ville</label><input id="set-ville" value="Tunis"></div>
+      <div class="fg"><label>Adresse</label><input id="set-adresse" value="Avenue Habib Bourguiba, Tunis 1000, Tunisie"></div>
+      <div class="fg"><label>Téléphone</label><input id="set-tel" value="+216 71 000 000"></div>
+      <div class="fg"><label>Matricule fiscal</label><input id="set-fiscal" value="0025478900041"></div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <h3>${icon("user",17)}Notifications</h3>
+    <div class="settings-toggle-row"><div><div class="stt">Alertes stock critique</div><div class="std">Notifier quand un produit passe sous le seuil</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="settings-toggle-row"><div><div class="stt">Résultats critiques laboratoire</div><div class="std">Alerte immédiate au médecin référent</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="settings-toggle-row"><div><div class="stt">Rappels rendez-vous WhatsApp</div><div class="std">Envoi automatique 24h avant</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="settings-toggle-row"><div><div class="stt">Rapport quotidien direction</div><div class="std">Synthèse envoyée chaque matin à 8h</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+  </div>
+
+  <div class="settings-card">
+    <h3>${icon("calendar",17)}Régional</h3>
+    <div class="form-grid">
+      <div class="fg"><label>Langue</label><select id="set-langue"><option>Français</option><option>Arabe</option><option>Anglais</option></select></div>
+      <div class="fg"><label>Devise</label><select id="set-devise"><option>DT (Dinar tunisien)</option><option>MAD (Dirham marocain)</option><option>EUR (Euro)</option></select></div>
+      <div class="fg"><label>Fuseau horaire</label><select id="set-fuseau"><option>Africa/Tunis (GMT+1)</option><option>Africa/Casablanca (GMT+1)</option><option>Europe/Paris (GMT+1)</option></select></div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:18px;">
+      <button class="btn btn-primary" onclick="saveSettings()">${icon("check",14)}Enregistrer les modifications</button>
+    </div>
+  </div>
+</section>`);
+
+/* ================= INIT RENDER ================= */
+renderDashboardExtras();
+renderPatients();
+renderCalendar();
+renderConges();
+renderAchats();
+renderPharmacie();
+renderRH();
+renderReporting();
+renderNotifications();
+renderAdministration();
+["dme","hospitalisation","labo","imagerie","personnel","bloc","facturation"].forEach(renderCrud);
+renderPortefeuille();
+
+/* ================= NAVIGATION ================= */
+const TITLES = {
+  dashboard:["Vue d'ensemble", "Holding Assalam · 4 établissements", null],
+  orientation:["Orientation IA", "Affectation automatique du patient", "clinique"],
+  patients:["Patients & admissions", "Fiches patients complètes", "clinique"],
+  rdv:["Rendez-vous & calendrier", "Disponibilités en temps réel", "clinique"],
+  dme:["Dossier médical électronique", "Dossier patient longitudinal", "clinique"],
+  hospitalisation:["Hospitalisation & lits", "Cartographie des lits", "clinique"],
+  labo:["Laboratoire & analyses", "Prescription et validation", "clinique"],
+  imagerie:["Imagerie médicale", "RIS/PACS", "clinique"],
+  pharmacie:["Pharmacie & stock local", "Dispensation et alertes IA", "clinique"],
+  bloc:["Bloc opératoire", "Programmation d'équipe", "clinique"],
+  facturation:["Facturation patient", "Facturation à l'acte", "clinique"],
+  personnel:["Personnel & disponibilités", "Registre utilisé par l'IA", "clinique"],
+  portefeuille:["Portefeuille cliniques", "Exercices, journal, bilan, CPC", "holding"],
+  reporting:["Reporting & BI", "Rapports automatisés", "holding"],
+  rh:["RH Groupe", "Effectifs consolidés", "holding"],
+  stocks:["Achats & stocks groupe", "Commandes à confirmer", "holding"],
+  ia:["Centre des agents IA", "Automatisation transversale", "holding"],
+  notifications:["Notifications", "Alertes et événements en temps réel", null],
+  administration:["Administration", "Utilisateurs, permissions, journal et intégrations", null],
+  parametres:["Paramètres", "Configuration de la plateforme", null],
+};
+function go(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const target = document.getElementById("page-"+page);
+  if(target) target.classList.add("active");
+  document.querySelectorAll(".nav-item, .overview-item").forEach(n=>n.classList.remove("active"));
+  const navBtn = document.querySelector(`.nav-item[data-page="${page}"]`) || (page==="dashboard" ? document.getElementById("overviewBtn") : null);
+  if(navBtn) navBtn.classList.add("active");
+  const t = TITLES[page];
+  if(t){
+    document.getElementById("topTitle").textContent = t[0];
+    document.getElementById("topSub").textContent = t[1];
+    const tag = document.getElementById("topSpaceTag");
+    if(t[2]==="clinique"){ tag.style.display="inline-block"; tag.className="space-tag clinique"; tag.textContent="Clinique"; }
+    else if(t[2]==="holding"){ tag.style.display="inline-block"; tag.className="space-tag holding"; tag.textContent="Holding"; }
+    else{ tag.style.display="none"; }
+  }
+  document.getElementById("content").scrollTop = 0;
+}
+function setSpace(space){
+  document.getElementById("btnSpaceClinique").classList.toggle("active", space==="clinique");
+  document.getElementById("btnSpaceHolding").classList.toggle("active", space==="holding");
+  document.querySelector(".nav-clinique").classList.toggle("nav-hidden", space!=="clinique");
+  document.querySelector(".nav-holding").classList.toggle("nav-hidden", space!=="holding");
+  document.getElementById("overviewBtn").classList.remove("active");
+  if(space==="clinique") go("orientation");
+  else{ pfGoList(); go("portefeuille"); }
+}
+document.querySelectorAll(".nav-item").forEach(item=> item.addEventListener("click", ()=>{
+  go(item.dataset.page);
+  if(item.dataset.page==="portefeuille"){ pfGoList(); }
+}));
+function goPinned(page){
+  document.querySelector(".nav-clinique").classList.add("nav-hidden");
+  document.querySelector(".nav-holding").classList.add("nav-hidden");
+  document.getElementById("btnSpaceClinique").classList.remove("active");
+  document.getElementById("btnSpaceHolding").classList.remove("active");
+  document.querySelectorAll(".overview-item").forEach(n=>n.classList.remove("active"));
+  go(page);
+}
+document.getElementById("overviewBtn").addEventListener("click", ()=>{ goPinned("dashboard"); document.getElementById("overviewBtn").classList.add("active"); });
+document.getElementById("notifBtn").addEventListener("click", ()=>{ goPinned("notifications"); document.getElementById("notifBtn").classList.add("active"); });
+document.getElementById("adminBtn").addEventListener("click", ()=>{ goPinned("administration"); document.getElementById("adminBtn").classList.add("active"); });
+document.getElementById("paramsBtn").addEventListener("click", ()=>{ goPinned("parametres"); document.getElementById("paramsBtn").classList.add("active"); });
+go("dashboard");
+</script>
+</body>
+</html>
